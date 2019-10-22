@@ -1,4 +1,4 @@
-package com.jfernandez.articulo.controller;
+package com.jfernandez.cliente.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -15,19 +15,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jfernandez.articulo.dao.ArticuloDAO;
-import com.jfernandez.articulo.model.Articulo;
-import com.jfernandez.categoria.dao.CategoriaDAO;
-import com.jfernandez.categoria.model.Categoria;
+import com.jfernandez.cliente.dao.ClienteDAO;
+import com.jfernandez.cliente.model.Cliente;
+import com.jfernandez.posiva.model.PosIva;
 
+@WebServlet("/adminCliente")
+public class AdminCliente {
 
-@WebServlet("/adminArticulo")
-public class AdminArticulo extends HttpServlet{
-	
 	private static final long serialVersionUID = 1L;
-	ArticuloDAO articuloDAO;
-	CategoriaDAO categoriaDAO;
-	private Categoria cat = null;
+	ClienteDAO clienteDAO;
+	PosIvaDAO posivaDAO;
+	private PosIva posiva = null;
 	
 	public void init() {
 		String jdbcURL = getServletContext().getInitParameter("jdbcURL");
@@ -35,8 +33,8 @@ public class AdminArticulo extends HttpServlet{
 		String jdbcPassword = getServletContext().getInitParameter("jdbcPassword");
 		try {
  
-			articuloDAO = new ArticuloDAO(jdbcURL, jdbcUsername, jdbcPassword);
-			categoriaDAO = new CategoriaDAO(jdbcURL, jdbcUsername, jdbcPassword);
+			clienteDAO = new ClienteDAO(jdbcURL, jdbcUsername, jdbcPassword);
+			posivaDAO = new PosIvaDAO(jdbcURL, jdbcUsername, jdbcPassword);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,7 +44,7 @@ public class AdminArticulo extends HttpServlet{
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public AdminArticulo() {
+	public AdminCliente() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -97,7 +95,7 @@ public class AdminArticulo extends HttpServlet{
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Hola Servlet..");
+		System.out.println("Hola Servlet Cliente");
 		doGet(request, response);
 	}
 	
@@ -107,7 +105,8 @@ public class AdminArticulo extends HttpServlet{
 		dispatcher.forward(request, response);
 	}
  
-	private void registrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	private void registrar(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, SQLException {
 		
 		//----------FORMATO DE FECHA------------------------------------------
 		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
@@ -115,22 +114,25 @@ public class AdminArticulo extends HttpServlet{
 		Date fecha=null;
 		
 		try {
-			fecha = formatoFecha.parse(request.getParameter("fecha_alta"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			fecha = formatoFecha.parse(request.getParameter("fecha_nacimiento"));
+		} catch (ParseException e) {			
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------
-		cat = new Categoria(Integer.parseInt(request.getParameter("categoria")));
-		Articulo articulo = new Articulo(
-				Integer.parseInt(request.getParameter("id_articulo")),
-				cat,
-				request.getParameter("nombre_articulo"),
-				fecha,			
-				Double.valueOf(request.getParameter("precio")),
-				Integer.parseInt(request.getParameter("cantidad")));			
+		posiva = new PosIva(Integer.parseInt(request.getParameter("id_posiva")));
+		Cliente cliente = new Cliente(
+				Integer.parseInt(request.getParameter("id_cliente")),				
+				request.getParameter("nombre"),
+				request.getParameter("apellido"),
+				fecha,
+				request.getParameter("dni"),
+				request.getParameter("domicilio"),
+				request.getParameter("emil"),
+				request.getParameter("telefono"),
+				posiva,
+				request.getParameter("cuit"));
 			
-		articuloDAO.insertar(articulo);
+		clienteDAO.insertar(cliente);
 		mostrar(request, response);
 				
 		//RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/mostrar.jsp");
@@ -138,31 +140,34 @@ public class AdminArticulo extends HttpServlet{
 		//dispatcher.forward(request, response);
 	}
 	//Deriva al formulario de altas
-	private void nuevo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/articulo/articuloAlta.jsp");
-		List<Categoria>lCategorias = categoriaDAO.listarCategorias();		
-		request.setAttribute("listaC", lCategorias);	
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, SQLException {
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteAlta.jsp");
+		List<PosIva>liva = posivaDAO.listarPosiva();		
+		request.setAttribute("listaIva", liva);	
 		dispatcher.forward(request, response);
 	}
 	
-	//muestra todoa los articulos
+	//muestra todoa los clientes
 	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/articulo/articuloMostrar.jsp");
-		List<Articulo> listaArticulos= articuloDAO.listarArticulo();
-		request.setAttribute("lista", listaArticulos);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteMostrar.jsp");
+		List<Cliente> listaClientes= clienteDAO.listarCliente();
+		request.setAttribute("listaCli", listaClientes);
 		dispatcher.forward(request, response);
 	}	
 	
 	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		
-		Articulo art = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+		Cliente cli = clienteDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
 		
-		List<Categoria>lCategorias = categoriaDAO.listarCategorias();
-		request.setAttribute("id_c", art.getcat().getId_categoria());
-		request.setAttribute("nomCat", art.getcat().getNombre_categoria());
-		request.setAttribute("listaC", lCategorias);
-		request.setAttribute("articulos", art);		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/articulo/articuloEditar.jsp");
+		List<PosIva>liva = posivaDAO.listarIva();
+		request.setAttribute("id_iva", cli.getPosIva().getId_posiva());
+		request.setAttribute("nomiva", cli.getPosIva().getNombre_posiva());
+		request.setAttribute("porcent", cli.getPosIva().getPorcentaje());
+		request.setAttribute("listaI", liva);
+		request.setAttribute("cliente", cli);		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteEditar.jsp");
 		dispatcher.forward(request, response);
 	}
 	
@@ -173,32 +178,37 @@ public class AdminArticulo extends HttpServlet{
 		Date fecha=null;
 		
 		try {
-			fecha = formatoFecha.parse(request.getParameter("fecha_alta"));
+			fecha = formatoFecha.parse(request.getParameter("fecha_nacimiento"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------
 				
-		Articulo articulo = new Articulo(
-				Integer.parseInt(request.getParameter("id_articulo")),
-				cat,
-				request.getParameter("nombre_articulo"),
-				fecha,				
-				Double.parseDouble(request.getParameter("precio")),
-				Integer.parseInt(request.getParameter("cantidad")));
+		Cliente cliente = new Cliente(
+				Integer.parseInt(request.getParameter("id_cliente")),				
+				request.getParameter("nombre"),
+				request.getParameter("apellido"),
+				fecha,
+				request.getParameter("dni"),
+				request.getParameter("domicilio"),
+				request.getParameter("emil"),
+				request.getParameter("telefono"),
+				posiva,
+				request.getParameter("cuit")
+		);
 		
-		if(articuloDAO.actualizar(articulo)) {
-			String mensaje = "Se ha actualizado el articulo: " + articulo.getNombre_articulo();
+		if(clienteDAO.actualizar(cliente)) {
+			String mensaje = "Se ha actualizado el cliente: " + cliente.getNombre() + " " + cliente.getApellido();
 			request.setAttribute("mensaje", mensaje);
 			mostrar(request, response);
 		}
 	}
 	
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{		
-		Articulo art = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
-		articuloDAO.eliminar(art);
-		String mensaje = "Se ha eliminado el articulo: " + art.getNombre_articulo();
+		Cliente cli = clienteDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+		clienteDAO.eliminar(cli);
+		String mensaje = "Se ha eliminado el cliente: " + cli.getNombre() + " " + cli.getApellido();
 		request.setAttribute("mensaje", mensaje);
 		mostrar(request, response);		
 	}
