@@ -155,9 +155,14 @@ public class AdminArticulo extends HttpServlet{
 	}	
 	
 	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		Articulo art = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));		
-		request.setAttribute("articulos", art);
 		
+		Articulo art = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+		
+		List<Categoria>lCategorias = categoriaDAO.listarCategorias();
+		request.setAttribute("id_c", art.getcat().getId_categoria());
+		request.setAttribute("nomCat", art.getcat().getNombre_categoria());
+		request.setAttribute("listaC", lCategorias);
+		request.setAttribute("articulos", art);		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/articulo/articuloEditar.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -191,7 +196,7 @@ public class AdminArticulo extends HttpServlet{
 		}
 	}
 	
-	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{		
 		Articulo art = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
 		articuloDAO.eliminar(art);
 		String mensaje = "Se ha eliminado el articulo: " + art.getNombre_articulo();

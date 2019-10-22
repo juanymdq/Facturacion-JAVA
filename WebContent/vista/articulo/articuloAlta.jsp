@@ -21,7 +21,7 @@
 			</div>
 			<div class="form-group">
 			  <label for="formGroupExampleInput2">Categoria</label>
-			  <select name="categoria" id="formGroupExampleInput2">
+			  <select name="categoria" id="formGroupExampleInput2">			  
 			  	  	<c:forEach var="cat" items="${listaC}">
 			  			<option value="${cat.id_categoria}">${cat.nombre_categoria}</option>
 			  		</c:forEach>			  	

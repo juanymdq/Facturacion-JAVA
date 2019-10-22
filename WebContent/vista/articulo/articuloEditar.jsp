@@ -21,7 +21,16 @@
 			  <label for="formGroupExampleInput2">Nombre de articulo</label>
 			  <input type="text" name="nombre_articulo" class="form-control" value='<c:out value="${articulos.nombre_articulo}"></c:out>' >
 			</div>
-		<div class="form-group">
+			<div class="form-group">
+			  <label for="formGroupExampleInput2">Categoria</label>
+			  <select name="categoria" id="formGroupExampleInput2">
+			  		<option value="${id_c}" selected>${nomCat}</option>
+			  	  	<c:forEach var="cat" items="${listaC}">
+			  			<option value="${cat.id_categoria}">${cat.nombre_categoria}</option>
+			  		</c:forEach>			  	
+			  </select>			  
+			</div>						
+			<div class="form-group">
 				<label for="formGroupExampleInput2">Fecha de alta</label>
 				<input type="date" name="fecha_alta" value="${articulos.fecha_alta}">
 				<fmt:parseDate pattern="yyyy-MM-dd HH:mm:ss" var="myDate"/>

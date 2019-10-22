@@ -92,11 +92,11 @@ public class ArticuloDAO {
 		connection = con.getJdbcConnection();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, id);
- 
+		//System.out.println("obtener id: " + id);
 		ResultSet res = statement.executeQuery();
 		
 		if (res.next()) {
-			objCat=new Categoria(res.getInt("id_categoria"), res.getString("nombre-categoria"));
+			objCat=new Categoria(res.getInt("id_categoria"), res.getString("nombre_categoria"));
 			articulo = new Articulo(res.getInt("id_articulo"), objCat, res.getString("nombre_articulo"), 
 					res.getDate("fecha_alta"), res.getDouble("precio"), res.getInt("cantidad"));
 		}
@@ -135,7 +135,7 @@ public class ArticuloDAO {
 	
 	//eliminar
 	public boolean eliminar(Articulo art) throws SQLException {
-		boolean rowEliminar = false;
+		boolean rowEliminar = false;		
 		String sql = "DELETE FROM articulos WHERE id_articulo=?";
 		con.conectar();
 		connection = con.getJdbcConnection();
