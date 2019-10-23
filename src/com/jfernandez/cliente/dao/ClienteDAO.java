@@ -12,10 +12,13 @@ import java.util.List;
 
 import com.jfernandez.articulo.model.Articulo;
 import com.jfernandez.categoria.model.Categoria;
+import com.jfernandez.ciudad.model.Ciudad;
 import com.jfernandez.cliente.model.Cliente;
 import com.jfernandez.conexion.Conexion;
+import com.jfernandez.posiva.dao.PosIvaDAO;
 import com.jfernandez.posiva.model.PosIva;
 import com.jfernandez.provincia.dao.ProvinciaDAO;
+import com.jfernandez.provincia.model.Provincia;
 
 /*
  * @autor: Juany
@@ -26,7 +29,9 @@ public class ClienteDAO {
 	private Conexion con;
 	private Connection connection;
 	private PosIvaDAO posivaDAO;
-	private PosIva objiva=null;
+	private PosIva objIva=null;
+	private Ciudad objCiudad=null;
+	private Provincia objProv=null;
 	
 	public ClienteDAO(String jdbcURL, String jdbcUsername, String jdbcPassword) throws SQLException {
 		
@@ -37,7 +42,7 @@ public class ClienteDAO {
 	// insertar
 	public boolean insertar(Cliente cli) throws SQLException {
 		String sql = "INSERT INTO cliente (id_cliente, nombre, apellido, fecha_nacimiento, dni,"
-				+ "domicilio, email, telefono, id_posiva, cuit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";		
+				+ "domicilio, email, telefono, id_posiva, id_ciudad, cuit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";		
 		con.conectar();
 		connection = con.getJdbcConnection();
 		PreparedStatement statement = connection.prepareStatement(sql);
@@ -55,7 +60,8 @@ public class ClienteDAO {
 		statement.setString(7, cli.getEmail());
 		statement.setString(8, cli.getTelefono());
 		statement.setInt(9, cli.getPosIva().getId_posiva());
-		statement.setString(10, cli.getCuit());
+		statement.setInt(10, cli.getCiudad().getId_ciudad());
+		statement.setString(11, cli.getCuit());
 		
 		boolean rowInserted = statement.executeUpdate() > 0;		
 		statement.close();
@@ -67,8 +73,13 @@ public class ClienteDAO {
 	// listar todos los articulos
 	public List<Cliente> listarCliente() throws SQLException { 
 		List<Cliente> listaClientes = new ArrayList<Cliente>();
+		String sql =
+		"SELECT * " +
+		"FROM cliente as cl " +
+		"INNER JOIN posiva as p ON cl.id_posiva=p.id_posiva " +
+		"INNER JOIN ciudad as c ON cl.id_ciudad=c.id_ciudad";
 		
-		String sql = "SELECT * FROM cliente as c INNER JOIN posiva as p ON c.id_posiva=p.id_posiva";
+		//String sql = "SELECT * FROM cliente as c INNER JOIN posiva as p ON c.id_posiva=p.id_posiva";
 		con.conectar();
 		connection = con.getJdbcConnection();
 		Statement statement = connection.createStatement();
@@ -83,9 +94,30 @@ public class ClienteDAO {
 			String domicilio = rs.getString("domicilio");
 			String email  = rs.getString("email");
 			String telefono = rs.getString("telefono");
-			objiva = new PosIva(rs.getInt("id_posiva"), rs.getString("nombre_posiva"),rs.getDouble("porcentaje"));
+			objIva = new PosIva(rs.getInt("id_posiva"), rs.getString("nombre_posiva"),rs.getDouble("porcentaje"));
+			objProv = new Provincia(rs.getInt("id_provincia"));
+			objCiudad = new Ciudad(
+					rs.getInt("id_ciudad"),
+					rs.getString("nombre_ciudad"),
+					rs.getString("cod_poastal"),
+					objProv
+			);
 			String cuit = rs.getString("cuit");
-			Cliente cliente = new Cliente(id, nombre, apellido, fecha_nac, dni, domicilio, email, telefono, objiva, cuit);
+			
+			Cliente cliente = new Cliente(
+					id,
+					nombre,
+					apellido,
+					fecha_nac,
+					dni,
+					domicilio,
+					email,
+					telefono,
+					objIva,
+					objCiudad,
+					cuit
+			);
+			
 			listaClientes.add(cliente);
 		}
 		con.desconectar();
@@ -96,30 +128,53 @@ public class ClienteDAO {
 	public Cliente obtenerPorId(int id) throws SQLException {
 		Cliente cliente = null;
  
-		String sql = "SELECT * FROM cliente as c INNER JOIN posiva as p ON c.id_posiva=p.id_pociva and c.id_cliente=?";
+		String sql = "SELECT * "
+				+ "FROM cliente as c "
+				+ "INNER JOIN posiva as p ON c.id_posiva=p.id_pociva "
+				+ "INNER JOIN ciudad as ci ON c.id_ciudad=ci.id_ciudad"
+				+ "and c.id_cliente=?";
+		
 		con.conectar();
 		connection = con.getJdbcConnection();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, id);
-		//System.out.println("obtener id: " + id);
-		ResultSet res = statement.executeQuery();
+		ResultSet rs = statement.executeQuery();
 		
-		if (res.next()) {			
-			objiva=new PosIva(res.getInt("id_poaiva"), res.getString("nombre_posiva"), res.getDouble("porcentaje"));
+		if (rs.next()) {
+			id = rs.getInt("id_cliente");			
+			String nombre = rs.getString("nombre");				
+			String apellido = rs.getString("apellido");
+			Date fecha_nac = rs.getDate("fecha_nacimiento");
+			String dni = rs.getString("dni");
+			String domicilio = rs.getString("domicilio");
+			String email  = rs.getString("email");
+			String telefono = rs.getString("telefono");
+			objIva=new PosIva(rs.getInt("id_poaiva"), rs.getString("nombre_posiva"), rs.getDouble("porcentaje"));
+			objProv = new Provincia(rs.getInt("id_provincia"));
+			objCiudad = new Ciudad(
+					rs.getInt("id_ciudad"),
+					rs.getString("nombre_ciudad"),
+					rs.getString("cod_poastal"),
+					objProv
+			);
+			String cuit = rs.getString("cuit");
+			
 			cliente = new Cliente(
-					res.getInt("id_cliente"),
-					res.getString("nombre"), 
-					res.getString("apellido"),
-					res.getDate("fecha_nacimiento"),
-					res.getString("dni"),
-					res.getString("domicilio"),
-					res.getString("telefono"),
-					res.getString("email"),
-					objiva,
-					res.getString("cuit"));			
+					id,
+					nombre,
+					apellido,
+					fecha_nac,
+					dni,
+					domicilio,
+					email,
+					telefono,
+					objIva,
+					objCiudad,
+					cuit
+			);
 		}
 		
-		res.close();
+		rs.close();
 		con.desconectar();
  
 		return cliente;
@@ -128,7 +183,7 @@ public class ClienteDAO {
 	// actualizar
 	public boolean actualizar(Cliente cli) throws SQLException {			
 		String sql = "UPDATE clientes SET id_cliente=?, nombre=?, apellido=?, fecha_nacimiento=?, dni=?,"
-				+ " domicilio=?, email=?, telefono=?, id_posiva=?, cuit=? WHERE id_cliente=?";		
+				+ " domicilio=?, email=?, telefono=?, id_posiva=?, id_ciudad=? cuit=? WHERE id_cliente=?";		
 		con.conectar();
 		connection = con.getJdbcConnection();		
 		PreparedStatement statement = connection.prepareStatement(sql);
@@ -146,7 +201,8 @@ public class ClienteDAO {
 		statement.setString(7, cli.getEmail());
 		statement.setString(8, cli.getTelefono());
 		statement.setInt(9, cli.getPosIva().getId_posiva());
-		statement.setString(10, cli.getCuit());
+		statement.setInt(10, cli.getCiudad().getId_ciudad());
+		statement.setString(11, cli.getCuit());
 	
 		boolean rowActualizar = statement.executeUpdate() > 0;
 		

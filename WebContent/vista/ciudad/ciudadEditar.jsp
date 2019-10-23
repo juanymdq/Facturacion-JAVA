@@ -21,9 +21,13 @@
 			  <input type="text" name="nombre_ciudad" class="form-control" value='<c:out value="${ciudad.nombre_ciudad}"></c:out>' >
 			</div>
 			<div class="form-group">
+			  <label for="formGroupExampleInput2">C&oacute;digo Postal</label>
+			  <input type="text" name="cod_postal" class="form-control" value='<c:out value="${ciudad.cod_postal}"></c:out>' >
+			</div>
+			<div class="form-group">
 			  <label for="formGroupExampleInput2">Provincia</label>
 			  <select name="id_provincia" id="formGroupExampleInput2">
-			  		<option value="${ciudad.id_provincia}" selected>${ciudad.nombre_provincia}</option>
+			  		<option value="${idProv}" selected>${nomProv}</option>
 			  	  	<c:forEach var="prov" items="${listap}">
 			  			<option value="${prov.id_provincia}">${prov.nombre_provincia}</option>
 			  		</c:forEach>

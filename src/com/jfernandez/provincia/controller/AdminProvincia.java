@@ -20,6 +20,7 @@ import com.jfernandez.provincia.model.Provincia;
  */
 @WebServlet("/adminProvincia")
 public class AdminProvincia extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
 	ProvinciaDAO provinciaDAO;
  
@@ -39,8 +40,7 @@ public class AdminProvincia extends HttpServlet {
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AdminProvincia() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
  
 	/**
@@ -49,7 +49,7 @@ public class AdminProvincia extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Hola Servlet..");
+		System.out.println("Servlet Provincia doGet");
 		String action = request.getParameter("action");		
 		System.out.println(action);
 		try {
@@ -91,12 +91,11 @@ public class AdminProvincia extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Hola Servlet..");
+		System.out.println("Servlet provincia doPost");
 		doGet(request, response);
 	}
 	
 	private void index (HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		//mostrar(request, response);
 		RequestDispatcher dispatcher= request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -141,8 +140,6 @@ public class AdminProvincia extends HttpServlet {
 		}else{
 			String mensaje = "Provincia: " + prov.getNombre_provincia() + " se elimino correctamente";
 			request.setAttribute("mensaje", mensaje);
-			//RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-			//dispatcher.forward(request, response);
 		}
 		mostrar(request, response);
 	}

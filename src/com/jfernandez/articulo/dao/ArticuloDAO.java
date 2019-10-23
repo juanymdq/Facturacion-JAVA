@@ -92,7 +92,6 @@ public class ArticuloDAO {
 		connection = con.getJdbcConnection();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, id);
-		//System.out.println("obtener id: " + id);
 		ResultSet res = statement.executeQuery();
 		
 		if (res.next()) {

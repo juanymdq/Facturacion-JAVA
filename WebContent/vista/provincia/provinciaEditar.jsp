@@ -41,9 +41,5 @@
 			<a href="adminProvincia?action=mostrar" >Volver</a>	
 		</form>
 	</div>
-
-
-
-
 </body>
 </html>

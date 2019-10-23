@@ -2,12 +2,9 @@ package com.jfernandez.cliente.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
- 
+import java.text.*;
+import java.util.*;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,19 +12,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jfernandez.ciudad.dao.CiudadDAO;
+import com.jfernandez.ciudad.model.Ciudad;
 import com.jfernandez.cliente.dao.ClienteDAO;
 import com.jfernandez.cliente.model.Cliente;
+import com.jfernandez.posiva.dao.PosIvaDAO;
 import com.jfernandez.posiva.model.PosIva;
 
 @WebServlet("/adminCliente")
-public class AdminCliente {
+public class AdminCliente extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
 	ClienteDAO clienteDAO;
 	PosIvaDAO posivaDAO;
 	private PosIva posiva = null;
+	CiudadDAO ciudadDAO;
+	private Ciudad ciudad=null;
 	
-	public void init() {
+	public void init() {		
 		String jdbcURL = getServletContext().getInitParameter("jdbcURL");
 		String jdbcUsername = getServletContext().getInitParameter("jdbcUsername");
 		String jdbcPassword = getServletContext().getInitParameter("jdbcPassword");
@@ -35,6 +37,7 @@ public class AdminCliente {
  
 			clienteDAO = new ClienteDAO(jdbcURL, jdbcUsername, jdbcPassword);
 			posivaDAO = new PosIvaDAO(jdbcURL, jdbcUsername, jdbcPassword);
+			ciudadDAO = new CiudadDAO(jdbcURL, jdbcUsername, jdbcPassword);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,7 +49,6 @@ public class AdminCliente {
 	 */
 	public AdminCliente() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
  
 	/**
@@ -54,7 +56,8 @@ public class AdminCliente {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {		
+			throws ServletException, IOException {	
+		System.out.println("Servlet Cliente doGet");
 		String action = request.getParameter("action");		
 		System.out.println(action);
 		try {
@@ -95,12 +98,11 @@ public class AdminCliente {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Hola Servlet Cliente");
+		System.out.println("Servlet Cliente doPost");
 		doGet(request, response);
 	}
 	
 	private void index (HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		//mostrar(request, response);
 		RequestDispatcher dispatcher= request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -120,6 +122,7 @@ public class AdminCliente {
 		}
 		//--------------------------------------------------------------------
 		posiva = new PosIva(Integer.parseInt(request.getParameter("id_posiva")));
+		ciudad = new Ciudad(Integer.parseInt(request.getParameter("id_ciudad")));
 		Cliente cliente = new Cliente(
 				Integer.parseInt(request.getParameter("id_cliente")),				
 				request.getParameter("nombre"),
@@ -130,28 +133,33 @@ public class AdminCliente {
 				request.getParameter("emil"),
 				request.getParameter("telefono"),
 				posiva,
-				request.getParameter("cuit"));
+				ciudad,
+				request.getParameter("cuit")
+		);
 			
 		clienteDAO.insertar(cliente);
-		mostrar(request, response);
-				
-		//RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/mostrar.jsp");
-		
-		//dispatcher.forward(request, response);
+		mostrar(request, response);		
 	}
+	
 	//Deriva al formulario de altas
 	private void nuevo(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, SQLException {
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteAlta.jsp");
+		//Paso todas las posiciones IVA
 		List<PosIva>liva = posivaDAO.listarPosiva();		
-		request.setAttribute("listaIva", liva);	
+		request.setAttribute("listaIva", liva);
+		//Paso todas las ciudades
+		List<Ciudad> lCiudad= ciudadDAO.listarCiudades();
+		request.setAttribute("ListaC", lCiudad);
+		
 		dispatcher.forward(request, response);
 	}
 	
-	//muestra todoa los clientes
+	//muestra todos los clientes
 	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteMostrar.jsp");
+		System.out.println(dispatcher);
 		List<Cliente> listaClientes= clienteDAO.listarCliente();
 		request.setAttribute("listaCli", listaClientes);
 		dispatcher.forward(request, response);
@@ -160,12 +168,19 @@ public class AdminCliente {
 	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		
 		Cliente cli = clienteDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
-		
-		List<PosIva>liva = posivaDAO.listarIva();
+		//Paso los atributos de IVA - id, nombre, porcentaje
+		List<PosIva>liva = posivaDAO.listarPosiva();
 		request.setAttribute("id_iva", cli.getPosIva().getId_posiva());
 		request.setAttribute("nomiva", cli.getPosIva().getNombre_posiva());
 		request.setAttribute("porcent", cli.getPosIva().getPorcentaje());
 		request.setAttribute("listaI", liva);
+		//Paso los atributos de la ciudad
+		List<Ciudad>lCiudad = ciudadDAO.listarCiudades();
+		request.setAttribute("id_c", cli.getCiudad().getId_ciudad());
+		request.setAttribute("nomC", cli.getCiudad().getNombre_ciudad());
+		request.setAttribute("codP", cli.getCiudad().getCod_postal());
+		request.setAttribute("listaC", lCiudad);
+		
 		request.setAttribute("cliente", cli);		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteEditar.jsp");
 		dispatcher.forward(request, response);
@@ -195,6 +210,7 @@ public class AdminCliente {
 				request.getParameter("emil"),
 				request.getParameter("telefono"),
 				posiva,
+				ciudad,
 				request.getParameter("cuit")
 		);
 		

@@ -21,6 +21,10 @@
 			  <input type="text" name="nombre_ciudad" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el nombre de la ciudad">
 			</div>
 			<div class="form-group">
+			  <label for="formGroupExampleInput2">C&oacute;digo Postal</label>
+			  <input type="text" name="cod_postal" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el c&oacute;digo postal">
+			</div>
+			<div class="form-group">
 			  <label for="formGroupExampleInput2">Provincia</label>
 			  <select name="id_provincia" id="formGroupExampleInput2">
 			  	  	<c:forEach var="prov" items="${listap}">

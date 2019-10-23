@@ -23,6 +23,7 @@ public class CiudadDAO {
 	private Conexion con;
 	private Connection connection;
 	private ProvinciaDAO provDAO;
+	private Provincia objProv=null;
 	
 	public CiudadDAO(String jdbcURL, String jdbcUsername, String jdbcPassword) throws SQLException {
 		
@@ -36,13 +37,14 @@ public class CiudadDAO {
 	}	
 	// insertar ciudad
 	public boolean insertar(Ciudad ciudad) throws SQLException {
-		String sql = "INSERT INTO ciudad (id_ciudad, nombre_ciudad, id_provincia) VALUES (?, ?, ?)";		
+		String sql = "INSERT INTO ciudad (id_ciudad, nombre_ciudad, cod_postal, id_provincia) VALUES (?, ?, ?, ?)";		
 		con.conectar();
 		connection = con.getJdbcConnection();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, ciudad.getId_ciudad());
 		statement.setString(2, ciudad.getNombre_ciudad());
-		statement.setInt(3, ciudad.getId_provincia());
+		statement.setString(3, ciudad.getCod_postal());
+		statement.setInt(4, ciudad.getProvincia().getId_provincia());
  
 		boolean rowInserted = statement.executeUpdate() > 0;
 		statement.close();
@@ -63,8 +65,10 @@ public class CiudadDAO {
 		while (resulSet.next()) {
 			int id = resulSet.getInt("id_ciudad");
 			String nombre = resulSet.getString("nombre_ciudad");
-			String prov = resulSet.getString("nombre_provincia");
-			Ciudad ciudad = new Ciudad(id, nombre, prov);
+			String codp = resulSet.getString("cod_postal");
+			objProv = new Provincia(resulSet.getInt("id_provincia"), resulSet.getString("nombre_provincia"));				
+			
+			Ciudad ciudad = new Ciudad(id, nombre, codp, objProv);
 			listaCiudades.add(ciudad);
 		}
 		con.desconectar();
@@ -85,7 +89,13 @@ public class CiudadDAO {
 		ResultSet res = statement.executeQuery();
 		
 		if (res.next()) {
-			ciudad = new Ciudad(res.getInt("id_ciudad"), res.getString("nombre_ciudad"), res.getInt("id_provincia"), res.getString("nombre_provincia"));
+			objProv = new Provincia(res.getInt("id_provincia"), res.getString("nombre_provincia"));
+			ciudad = new Ciudad(
+					res.getInt("id_ciudad"), 
+					res.getString("nombre_ciudad"),
+					res.getString("cod_postal"),
+					objProv
+			);
 		}
 		res.close();
 		con.desconectar();
@@ -96,7 +106,7 @@ public class CiudadDAO {
 	// actualizar
 	public boolean actualizar(Ciudad ciudad) throws SQLException {		
 		boolean rowActualizar = false;
-		String sql = "UPDATE ciudad SET id_ciudad=?,nombre_ciudad=?, id_provincia=? WHERE id_ciudad=?";
+		String sql = "UPDATE ciudad SET id_ciudad=?,nombre_ciudad=?, cod_postal=?, id_provincia=? WHERE id_ciudad=?";
 		
 		con.conectar();
 		connection = con.getJdbcConnection();
@@ -104,8 +114,9 @@ public class CiudadDAO {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, ciudad.getId_ciudad());
 		statement.setString(2, ciudad.getNombre_ciudad());
-		statement.setInt(3, ciudad.getId_provincia());
-		statement.setInt(4, ciudad.getId_ciudad());
+		statement.setString(3, ciudad.getCod_postal());
+		statement.setInt(4, ciudad.getProvincia().getId_provincia());
+		statement.setInt(5, ciudad.getId_ciudad());
 				
 		rowActualizar = statement.executeUpdate() > 0;
 		statement.close();

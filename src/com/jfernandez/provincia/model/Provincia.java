@@ -11,11 +11,16 @@ public class Provincia {
 	@Size(min=2, message=" Campo requerido")
 	private String nombre_provincia;
 	
-	//CONSTRUCTORES--------------------------------------------------------------------------
+	//----------------------CONSTRUCTORES-------------------------------------------------
 	public Provincia() {}
 	
-	public Provincia(int id_provincia, String nombre_provincia) {
-		
+	//SOBRECARGA DE CONTRSUCTORES
+	public Provincia(int id_provincia) {		
+		this.id_provincia = id_provincia;
+		this.nombre_provincia = nombre_provincia;
+	}
+	
+	public Provincia(int id_provincia, String nombre_provincia) {		
 		this.id_provincia = id_provincia;
 		this.nombre_provincia = nombre_provincia;
 	}

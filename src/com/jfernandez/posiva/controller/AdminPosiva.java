@@ -1,8 +1,7 @@
-package com.jfernandez.ciudad.controller;
+package com.jfernandez.posiva.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
  
 import javax.servlet.RequestDispatcher;
@@ -12,40 +11,34 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jfernandez.ciudad.dao.CiudadDAO;
-import com.jfernandez.ciudad.model.Ciudad;
-import com.jfernandez.provincia.dao.ProvinciaDAO;
-import com.jfernandez.provincia.model.Provincia;
-
+import com.jfernandez.posiva.dao.PosIvaDAO;
+import com.jfernandez.posiva.model.PosIva;
 
 /**
  * Servlet implementation class AdminArticulo
  */
-@WebServlet("/adminCiudad")
-public class AdminCiudad extends HttpServlet {
+@WebServlet("/adminPosiva")
+public class AdminPosiva extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
-	CiudadDAO ciudadDAO;
-	ProvinciaDAO provinciaDAO;
-	private Provincia prov=null;
-	
+	PosIvaDAO posivaDAO;
+ 
 	public void init() {
 		String jdbcURL = getServletContext().getInitParameter("jdbcURL");
 		String jdbcUsername = getServletContext().getInitParameter("jdbcUsername");
 		String jdbcPassword = getServletContext().getInitParameter("jdbcPassword");
 		try {
  
-			ciudadDAO = new CiudadDAO(jdbcURL, jdbcUsername, jdbcPassword);
-			provinciaDAO = new ProvinciaDAO(jdbcURL, jdbcUsername, jdbcPassword);
+			posivaDAO = new PosIvaDAO(jdbcURL, jdbcUsername, jdbcPassword);
 		} catch (Exception e) {
-			e.printStackTrace();
+			// TODO: handle exception
 		}
 	}
  
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public AdminCiudad() {
+	public AdminPosiva() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -56,7 +49,7 @@ public class AdminCiudad extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {		
-		String action = request.getParameter("action");
+		String action = request.getParameter("action");		
 		System.out.println(action);
 		try {
 			switch (action) {
@@ -88,6 +81,7 @@ public class AdminCiudad extends HttpServlet {
 			e.getStackTrace();
 		}
 		
+		
 	}
  
 	/**
@@ -96,7 +90,7 @@ public class AdminCiudad extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Hola Servlet Ciudad");
+		System.out.println("Hola Servletv AdminPosiva");
 		doGet(request, response);
 	}
 	
@@ -106,66 +100,52 @@ public class AdminCiudad extends HttpServlet {
 	}
  
 	private void registrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		prov = new Provincia(Integer.parseInt(request.getParameter("id_provincia")));
-		Ciudad ciudad = new Ciudad(
-				Integer.parseInt(request.getParameter("id_ciudad")),
-				request.getParameter("nombre_ciudad"),
-				request.getParameter("cod_postal"),
-				prov
-		);
-		ciudadDAO.insertar(ciudad);
-		mostrar(request, response);		
+			PosIva pos = new PosIva(
+					Integer.parseInt(request.getParameter("id_posiva")),
+					request.getParameter("nombre_posiva"),
+					Double.parseDouble(request.getParameter("porcentaje")));
+			posivaDAO.insertar(pos);
+			mostrar(request, response);	
 	}
 	
-	//Deriva al formulario de altas con las provincias como atributos
-	private void nuevo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/ciudad/ciudadAlta.jsp");		
-		List<Provincia>lProvincias = provinciaDAO.listarProvincias();		
-		request.setAttribute("listap", lProvincias);	
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/posiva/posivaAlta.jsp");
 		dispatcher.forward(request, response);
 	}
 	
-	//muestra todas las ciudades enviandolas como parametros
+	
 	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/ciudad/ciudadMostrar.jsp");
-		List<Ciudad> listaCiudades= ciudadDAO.listarCiudades();
-		request.setAttribute("listaC", listaCiudades);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/posiva/posivaMostrar.jsp");
+		List<PosIva> listaIva= posivaDAO.listarPosiva();
+		request.setAttribute("listaI", listaIva);
 		dispatcher.forward(request, response);
 	}	
 	
 	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		Ciudad ciudad = ciudadDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+		PosIva pos = posivaDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+		request.setAttribute("posicion", pos);
 		
-		List<Provincia>lProvincias = provinciaDAO.listarProvincias();
-		//paso el id y el nombre de la provincia guardados
-		request.setAttribute("idProv", ciudad.getProvincia().getId_provincia());
-		request.setAttribute("nomProv", ciudad.getProvincia().getNombre_provincia());
-		//paso todo el listado de provincias
-		request.setAttribute("listap", lProvincias);
-		//paso todo el objeto ciudad
-		request.setAttribute("ciudad", ciudad);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/ciudad/ciudadEditar.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/posiva/posivaEditar.jsp");
 		dispatcher.forward(request, response);
 	}
 	
 	private void editar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		prov = new Provincia(Integer.parseInt(request.getParameter("id_provincia")));
-		Ciudad ciudad = new Ciudad(
-				Integer.parseInt(request.getParameter("id_ciudad")),
-				request.getParameter("nombre_ciudad"),
-				request.getParameter("cod_postal"),
-				prov
-		);
-		
-		if(ciudadDAO.actualizar(ciudad)) mostrar(request, response);
+		PosIva pos = new PosIva(
+				Integer.parseInt(request.getParameter("id_posiva")),
+				request.getParameter("nombre_posiva"),
+				Double.parseDouble(request.getParameter("porcentaje")));
+		if(posivaDAO.actualizar(pos)) mostrar(request, response);
 	}
 	
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		Ciudad ciudad = ciudadDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
-		ciudadDAO.eliminar(ciudad);
-		String mensaje = "Ciudad: " + ciudad.getNombre_ciudad() + " se elimino correctamente del sistema";
-		request.setAttribute("mensaje", mensaje);
-		mostrar(request, response);		
+		PosIva pos = posivaDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+		if(!posivaDAO.eliminar(pos)){			
+			String mensaje = "No se puede eliminar la posicion IVA" + pos.getNombre_posiva()  + " ya que tiene personas asociadas";
+			request.setAttribute("mensaje", mensaje);
+		}else{
+			String mensaje = "La posicion IVA: " + pos.getNombre_posiva() + " se elimino correctamente";
+			request.setAttribute("mensaje", mensaje);			
+		}
+		mostrar(request, response);
 	}
 }

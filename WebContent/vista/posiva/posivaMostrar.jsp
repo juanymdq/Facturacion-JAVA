@@ -7,16 +7,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<title>Administrar Ciudades</title>
+<title>Administrar Posiciones IVA</title>
 </head>
 <body>
-	<center><h1>Lista Ciudades</h1></center>
-	<center><a href="adminCiudad?action=mostrar">Actualizar</a></center>
+	<center><h1>Lista  Posiciones IVA</h1></center>
+	<center><a href="adminPosiva?action=mostrar" >Actualizar</a></center>
 	<div class="container">
 		<center><p style="color:red">${mensaje}<p></center>
 		<table>
 			<tr>
-				<td><a href="adminProvincia?action=index" >Ir al menú</a> </td>
+				<td><a href="adminPosiva?action=index" >Ir al menú</a> </td>				
 			</tr>
 		</table>
 		
@@ -24,19 +24,17 @@
 			<tr>
 			 <td>ID</td>
 			 <td>NOMBRE</td>
-			 <td>COD. POSTAL</td>
-			 <td>PROVINCIA</td>		 
+			 <td>PORCENTAJE</td>		 
 			 <td>ACCIONES</td>
-			 <td><a href="adminCiudad?action=nuevo"><font size="6">+</font></a></td>	
+			 <td><a href="adminPosiva?action=nuevo"><font size="6">+</font></a></td>	
 			</tr>
-			<c:forEach var="ciudad" items="${listaC}">
+			<c:forEach var="pos" items="${listaI}">
 				<tr>
-					<td><c:out value="${ciudad.id_ciudad}"/></td>			
-					<td><c:out value="${ciudad.nombre_ciudad}"/></td>
-					<td><c:out value="${ciudad.cod_postal}"/></td>						
-					<td><c:out value="${ciudad.provincia.nombre_provincia}"/></td>
-					<td><a href="adminCiudad?action=showedit&id=<c:out value="${ciudad.id_ciudad}" />">Editar</a></td>
-					<td><a href="adminCiudad?action=eliminar&id=<c:out value="${ciudad.id_ciudad}"/>">Eliminar</a> </td>				
+					<td><c:out value="${pos.id_posiva}"/></td>			
+					<td><c:out value="${pos.nombre_posiva}"/></td>				
+					<td><c:out value="${pos.porcentaje}"/></td>
+					<td><a href="adminPosiva?action=showedit&id=<c:out value="${pos.id_posiva}" />">Editar</a></td>
+					<td><a href="adminPosiva?action=eliminar&id=<c:out value="${pos.id_posiva}"/>">Eliminar</a> </td>				
 				</tr>
 			</c:forEach>
 		</table>

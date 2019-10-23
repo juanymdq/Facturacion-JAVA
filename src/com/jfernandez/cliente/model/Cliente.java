@@ -2,6 +2,7 @@ package com.jfernandez.cliente.model;
 
 import java.util.Date;
 
+import com.jfernandez.ciudad.model.Ciudad;
 import com.jfernandez.posiva.model.PosIva;
 
 public class Cliente {
@@ -15,11 +16,13 @@ public class Cliente {
 	private String email;
 	private String telefono;
 	private PosIva posIva;
+	private Ciudad ciudad;
 	private String cuit;
 	
+	//--------CONSTRUCTOR---------------------------------------------------------------------
 	public Cliente(int id_cliente, String nombre, String apellido, Date fecha_nacimiento, String dni, String domicilio,
-			String email, String telefono, PosIva posIva, String cuit) {
-		
+			String email, String telefono, PosIva posIva, Ciudad ciudad, String cuit) {
+		super();
 		this.id_cliente = id_cliente;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -29,9 +32,12 @@ public class Cliente {
 		this.email = email;
 		this.telefono = telefono;
 		this.posIva = posIva;
+		this.ciudad = ciudad;
 		this.cuit = cuit;
 	}
 
+	//-------GETTERS AND SETTERS--------------------------------------------------
+	
 	public int getId_cliente() {
 		return id_cliente;
 	}
@@ -102,6 +108,14 @@ public class Cliente {
 
 	public void setPosIva(PosIva posIva) {
 		this.posIva = posIva;
+	}
+
+	public Ciudad getCiudad() {
+		return ciudad;
+	}
+
+	public void setCiudad(Ciudad ciudad) {
+		this.ciudad = ciudad;
 	}
 
 	public String getCuit() {

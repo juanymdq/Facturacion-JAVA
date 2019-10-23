@@ -23,6 +23,12 @@
 			<tr>
 				<td align="center"><a href="adminArticulo?action=mostrar">Articulos</a></td>
 			</tr>
+			<tr>
+				<td align="center"><a href="adminPosiva?action=mostrar">Posicion IVA</a></td>
+			</tr>
+			<tr>
+				<td align="center"><a href="adminCliente?action=mostrar">Clientes</a></td>
+			</tr>
 		</table>
 	</div>	
 	

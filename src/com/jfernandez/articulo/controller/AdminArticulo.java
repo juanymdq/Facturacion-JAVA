@@ -2,11 +2,8 @@ package com.jfernandez.articulo.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.*;
+import java.util.*;
  
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
