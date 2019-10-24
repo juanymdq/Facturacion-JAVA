@@ -41,12 +41,12 @@ public class ClienteDAO {
 	
 	// insertar
 	public boolean insertar(Cliente cli) throws SQLException {
-		String sql = "INSERT INTO cliente (id_cliente, nombre, apellido, fecha_nacimiento, dni,"
+		String sql = "INSERT INTO cliente (id_cliente, nombre, apellido, fecha_nacimiento, dni, "
 				+ "domicilio, email, telefono, id_posiva, id_ciudad, cuit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";		
 		con.conectar();
 		connection = con.getJdbcConnection();
 		PreparedStatement statement = connection.prepareStatement(sql);
-		
+			
 		statement.setInt(1, cli.getId_cliente());
 		statement.setString(2, cli.getNombre());
 		statement.setString(3, cli.getApellido());		
@@ -63,6 +63,8 @@ public class ClienteDAO {
 		statement.setInt(10, cli.getCiudad().getId_ciudad());
 		statement.setString(11, cli.getCuit());
 		
+		System.out.println("pos " + cli.getPosIva().getId_posiva());
+		System.out.println("ciu " + cli.getCiudad().getId_ciudad());
 		boolean rowInserted = statement.executeUpdate() > 0;		
 		statement.close();
 		con.desconectar();

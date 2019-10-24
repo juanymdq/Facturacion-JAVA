@@ -136,7 +136,7 @@ public class AdminCliente extends HttpServlet{
 				ciudad,
 				request.getParameter("cuit")
 		);
-			
+		
 		clienteDAO.insertar(cliente);
 		mostrar(request, response);		
 	}
@@ -151,15 +151,14 @@ public class AdminCliente extends HttpServlet{
 		request.setAttribute("listaIva", liva);
 		//Paso todas las ciudades
 		List<Ciudad> lCiudad= ciudadDAO.listarCiudades();
-		request.setAttribute("ListaC", lCiudad);
+		request.setAttribute("listaC", lCiudad);
 		
 		dispatcher.forward(request, response);
 	}
 	
 	//muestra todos los clientes
 	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteMostrar.jsp");
-		System.out.println(dispatcher);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteMostrar.jsp");		
 		List<Cliente> listaClientes= clienteDAO.listarCliente();
 		request.setAttribute("listaCli", listaClientes);
 		dispatcher.forward(request, response);

@@ -16,7 +16,7 @@
 		<center><p style="color:red">${mensaje}<p></center>
 		<table>
 			<tr>
-				<td><a href="adminCiente?action=index" >Ir al menú</a> </td>
+				<td><a href="adminCliente?action=index" >Ir al menú</a> </td>
 			</tr>
 		</table>
 		

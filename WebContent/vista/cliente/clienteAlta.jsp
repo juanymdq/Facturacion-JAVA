@@ -10,8 +10,8 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Registrar Cliente</h1>
-		<form action="adminArticulo?action=register" method="post">		
+		<center><h1>Registrar Cliente</h1></center>
+		<form action="adminCliente?action=register" method="post">		
 			<div class="col-xs-2">
 			    <label for="ex1">Id Cliente</label>			    
 			    <input class="form-control" name ="id_cliente" id="ex1" type="text" placeholder="Ingrese id del Cliente">	  		
@@ -31,24 +31,43 @@
 				<fmt:formatDate var="startFormat" pattern="yyyy-MM-dd"/>
 			</div>
 			<div class="form-group">
-			  <label for="formGroupExampleInput2">Categoria</label>
-			  <select name="categoria" id="formGroupExampleInput2">			  
-			  	  	<c:forEach var="cat" items="${listaC}">
-			  			<option value="${cat.id_categoria}">${cat.nombre_categoria}</option>
+			  <label for="formGroupExampleInput2">DNI</label>
+			  <input type="text" name="dni" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el DNI del cliente">
+			</div>
+			<div class="form-group">
+			  <label for="formGroupExampleInput2">Domicilio</label>
+			  <input type="text" name="domicilio" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el domicilio del cliente">
+			</div>
+			<div class="form-group">
+			  <label for="formGroupExampleInput2">Ciudad</label>
+			  <select name="id_ciudad" id="formGroupExampleInput2">			  
+			  	  	<c:forEach var="cd" items="${listaC}">
+			  			<option value="${cd.id_ciudad}">${cd.nombre_ciudad}</option>
 			  		</c:forEach>			  	
 			  </select>			  
-			</div>						
-			
+			</div>	
 			<div class="form-group">
-			  <label for="formGroupExampleInput2">Precio</label>
-			  <input type="text" name="precio" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el precio">
+			  <label for="formGroupExampleInput2">Email</label>
+			  <input type="text" name="email" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el email del cliente">
 			</div>
 			<div class="form-group">
-			  <label for="formGroupExampleInput2">Cantidad</label>
-			  <input type="text" name="cantidad" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese la cantidad">
+			  <label for="formGroupExampleInput2">Telefono</label>
+			  <input type="text" name="telefono" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el telefono del cliente">
 			</div>
+			<div class="form-group">
+			  <label for="formGroupExampleInput2">Posicion IVA</label>
+			  <select name="id_posiva" id="formGroupExampleInput2">			  
+			  	  	<c:forEach var="pos" items="${listaIva}">
+			  			<option value="${pos.id_posiva}">${pos.nombre_posiva}</option>
+			  		</c:forEach>			  	
+			  </select>			  
+			</div>	
+			<div class="form-group">
+			  <label for="formGroupExampleInput2">CUIT</label>
+			  <input type="text" name="cuit" class="form-control" id="formGroupExampleInput2" placeholder="Ingrese el cuit del cliente">
+			</div>		
 			<button type="submit" name="agregar" class="btn btn-primary mb-2">Guardar</button>
-			<a href="adminArticulo?action=mostrar" >Volver</a>	
+			<a href="adminCliente?action=mostrar" >Volver</a>	
 		</form>
 	</div>
 </body>
