@@ -21,8 +21,7 @@ public class Cliente {
 	
 	//--------CONSTRUCTOR---------------------------------------------------------------------
 	public Cliente(int id_cliente, String nombre, String apellido, Date fecha_nacimiento, String dni, String domicilio,
-			String email, String telefono, PosIva posIva, Ciudad ciudad, String cuit) {
-		super();
+			String email, String telefono, PosIva posIva, Ciudad ciudad, String cuit) {		
 		this.id_cliente = id_cliente;
 		this.nombre = nombre;
 		this.apellido = apellido;

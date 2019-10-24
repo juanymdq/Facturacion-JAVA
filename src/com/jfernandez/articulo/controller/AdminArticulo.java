@@ -176,7 +176,7 @@ public class AdminArticulo extends HttpServlet{
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------
-				
+		Categoria cat = new Categoria(Integer.parseInt(request.getParameter("id_categoria")));
 		Articulo articulo = new Articulo(
 				Integer.parseInt(request.getParameter("id_articulo")),
 				cat,

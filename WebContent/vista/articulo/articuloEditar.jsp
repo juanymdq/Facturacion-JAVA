@@ -10,7 +10,7 @@
 </head>
 <body>
 	<div class="container">
-		<center><h1>EditarArticulo</h1></center>
+		<center><h1>Editar Articulo</h1></center>
 		<center><p style="color:red">${mensaje}<p></center>
 		<form action="adminArticulo?action=editar" method="post" >		
 			<div class="col-xs-2">
@@ -23,7 +23,7 @@
 			</div>
 			<div class="form-group">
 			  <label for="formGroupExampleInput2">Categoria</label>
-			  <select name="categoria" id="formGroupExampleInput2">
+			  <select name="id_categoria" id="formGroupExampleInput2">
 			  		<option value="${id_c}" selected>${nomCat}</option>
 			  	  	<c:forEach var="cat" items="${listaC}">
 			  			<option value="${cat.id_categoria}">${cat.nombre_categoria}</option>

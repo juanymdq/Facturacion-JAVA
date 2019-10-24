@@ -130,13 +130,13 @@ public class AdminCliente extends HttpServlet{
 				fecha,
 				request.getParameter("dni"),
 				request.getParameter("domicilio"),
-				request.getParameter("emil"),
+				request.getParameter("email"),
 				request.getParameter("telefono"),
 				posiva,
 				ciudad,
 				request.getParameter("cuit")
-		);
-		
+		);		
+				
 		clienteDAO.insertar(cliente);
 		mostrar(request, response);		
 	}
@@ -160,6 +160,9 @@ public class AdminCliente extends HttpServlet{
 	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteMostrar.jsp");		
 		List<Cliente> listaClientes= clienteDAO.listarCliente();
+		for (Cliente cliente : listaClientes) {
+			System.out.println(cliente);
+		}
 		request.setAttribute("listaCli", listaClientes);
 		dispatcher.forward(request, response);
 	}	
@@ -198,7 +201,8 @@ public class AdminCliente extends HttpServlet{
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------
-				
+		posiva = new PosIva(Integer.parseInt(request.getParameter("id_posiva")));
+		ciudad = new Ciudad(Integer.parseInt(request.getParameter("id_ciudad")));		
 		Cliente cliente = new Cliente(
 				Integer.parseInt(request.getParameter("id_cliente")),				
 				request.getParameter("nombre"),
@@ -206,14 +210,14 @@ public class AdminCliente extends HttpServlet{
 				fecha,
 				request.getParameter("dni"),
 				request.getParameter("domicilio"),
-				request.getParameter("emil"),
+				request.getParameter("email"),
 				request.getParameter("telefono"),
 				posiva,
 				ciudad,
 				request.getParameter("cuit")
 		);
 		
-		if(clienteDAO.actualizar(cliente)) {
+		if(clienteDAO.actualizar(cliente)) {			
 			String mensaje = "Se ha actualizado el cliente: " + cliente.getNombre() + " " + cliente.getApellido();
 			request.setAttribute("mensaje", mensaje);
 			mostrar(request, response);

@@ -1,14 +1,9 @@
 package com.jfernandez.provincia.model;
 
-import javax.validation.constraints.*;
-
 public class Provincia {
 
-	@NotNull(message = "El id debe contener un valor")
-	private int id_provincia;
 	
-	@NotNull
-	@Size(min=2, message=" Campo requerido")
+	private int id_provincia;		
 	private String nombre_provincia;
 	
 	//----------------------CONSTRUCTORES-------------------------------------------------
@@ -17,7 +12,7 @@ public class Provincia {
 	//SOBRECARGA DE CONTRSUCTORES
 	public Provincia(int id_provincia) {		
 		this.id_provincia = id_provincia;
-		this.nombre_provincia = nombre_provincia;
+		//this.nombre_provincia = nombre_provincia;
 	}
 	
 	public Provincia(int id_provincia, String nombre_provincia) {		

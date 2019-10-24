@@ -7,6 +7,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style>
+.container{
+	font-size:12px;
+
+}
+
+
+
+</style>
 <title>Administrar Clientes</title>
 </head>
 <body>
@@ -47,10 +56,10 @@
 					<td><c:out value="${cli.ciudad.nombre_ciudad}"/></td>
 					<td><c:out value="${cli.email}"/></td>
 					<td><c:out value="${cli.telefono}"/></td>
-					<td><c:out value="${cli.posiva.nombre_posiva}"/></td>
+					<td><c:out value="${cli.posIva.nombre_posiva}"/></td>
 					<td><c:out value="${cli.cuit}"/></td>
 					<td><a href="adminCliente?action=showedit&id=<c:out value="${cli.id_cliente}" />">Editar</a></td>
-					<td><a href="adminCliente?action=eliminar&id=<c:out value="${cli.id_cliente}}"/>">Eliminar</a> </td>				
+					<td><a href="adminCliente?action=eliminar&id=<c:out value="${cli.id_cliente}"/>">Eliminar</a> </td>				
 				</tr>
 			</c:forEach>
 		</table>
