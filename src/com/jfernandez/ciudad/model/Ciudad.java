@@ -14,6 +14,10 @@ public class Ciudad {
 		this.id_ciudad = id_ciudad;
 	}
 	
+	public Ciudad(int id_ciudad, String nombre) {
+		this.id_ciudad=id_ciudad;
+		this.nombre_ciudad=nombre;
+	}
 	
 	public Ciudad(int id_ciudad, String nombre_ciudad, String cod_postal, Provincia provincia) {		
 		this.id_ciudad = id_ciudad;

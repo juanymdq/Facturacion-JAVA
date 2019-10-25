@@ -14,14 +14,14 @@
 }
 .table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {
- background-color: #C5DDF7;
+ background-color: #FDDF96;
 }
 .table-striped>tbody>tr:nth-child(even)>td, 
 .table-striped>tbody>tr:nth-child(even)>th {
- background-color: #96C8FD;
+ background-color: #FDDF96;
 }
 .table-striped>thead>tr>th {
-   background-color: #2784E7;
+   background-color: #E7AC1F;
 }
 </style>
 <title>Administrar Clientes</title>

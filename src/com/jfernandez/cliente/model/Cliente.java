@@ -24,6 +24,14 @@ public class Cliente {
 		this.id_cliente = id_cliente;
 	}
 	
+	public Cliente(int id_cliente, String nombre, String apellido, String domicilio, Ciudad ciudad) {
+		this.id_cliente=id_cliente;
+		this.nombre=nombre;
+		this.apellido=apellido;
+		this.domicilio=domicilio;
+		this.ciudad=ciudad;
+	}
+	
 	
 	public Cliente(int id_cliente, String nombre, String apellido, Date fecha_nacimiento, String dni, String domicilio,
 			String email, String telefono, PosIva posIva, Ciudad ciudad, String cuit) {		

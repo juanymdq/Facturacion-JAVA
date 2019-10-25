@@ -16,6 +16,12 @@ public class Articulo {
 	private int cantidad;
 	
 	//--------CONSTRUCTORES---------------------------------------------------------------------------------
+	public Articulo(int id_articulo, String nombre, double precio) {
+		this.id_articulo=id_articulo;
+		this.nombre_articulo=nombre;
+		this.precio=precio;
+	}
+	
 	
 	public Articulo(int id_articulo,Categoria cat, String nombre_articulo, Date fecha_alta, double precio, int cantidad) {
 		this.id_articulo = id_articulo;
