@@ -10,11 +10,19 @@
 <style>
 .container{
 	font-size:12px;
-
+	margin:10px 0 0 0;
 }
-
-
-
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+ background-color: #C5DDF7;
+}
+.table-striped>tbody>tr:nth-child(even)>td, 
+.table-striped>tbody>tr:nth-child(even)>th {
+ background-color: #96C8FD;
+}
+.table-striped>thead>tr>th {
+   background-color: #2784E7;
+}
 </style>
 <title>Administrar Clientes</title>
 </head>
@@ -22,45 +30,45 @@
 	<center><h1>Lista Clientes</h1></center>
 	<center><a href="adminCliente?action=mostrar">Actualizar</a></center>
 	<div class="container">
-		<center><p style="color:red">${mensaje}<p></center>
-		<table>
-			<tr>
-				<td><a href="adminCliente?action=index" >Ir al menú</a> </td>
-			</tr>
-		</table>
-		
+		<center><p style="color:red">${mensaje}<p></center>	
+		<a href="adminCliente?action=nuevo" class="btn btn-success btn-lg">Nuevo Registro</a>
+		<br>		
+		<center><a href="adminCliente?action=index">Ir al menú</a></center>
 		<table class="table table-striped">
-			<tr>
-			 <td>ID</td>
-			 <td>NOMBRE</td>
-			 <td>APELLIDO</td>
-			 <td>FECHA NACIMIENTO</td>
-			 <td>DNI</td>
-			 <td>DOMICILIO</td>
-			 <td>CIUDAD</td>		 
-			 <td>EMAIL</td>
-			 <td>TELEFONO</td>
-			 <td>POS IVA</td>
-			 <td>CUIT</td>				 
-			 <td>ACCIONES</td>
-			 <td><a href="adminCliente?action=nuevo"><font size="6">+</font></a></td>	
-			</tr>
-			<c:forEach var="cli" items="${listaCli}">
-				<tr>
-					<td><c:out value="${cli.id_cliente}"/></td>							
-					<td><c:out value="${cli.nombre}"/></td>
-					<td><c:out value="${cli.apellido}"/></td>					
-					<td><c:out value="${cli.fecha_nacimiento}"/></td>
-					<td><c:out value="${cli.dni}"/></td>
-					<td><c:out value="${cli.domicilio}"/></td>
-					<td><c:out value="${cli.ciudad.nombre_ciudad}"/></td>
-					<td><c:out value="${cli.email}"/></td>
-					<td><c:out value="${cli.telefono}"/></td>
-					<td><c:out value="${cli.posIva.nombre_posiva}"/></td>
-					<td><c:out value="${cli.cuit}"/></td>
-					<td><a href="adminCliente?action=showedit&id=<c:out value="${cli.id_cliente}" />">Editar</a></td>
-					<td><a href="adminCliente?action=eliminar&id=<c:out value="${cli.id_cliente}"/>">Eliminar</a> </td>				
+			<thead>
+				<tr class="encabezados">
+				 <th>ID</th>
+				 <th>NOMBRE</th>
+				 <th>APELLIDO</th>
+				 <th>FECHA NACIMIENTO</th>
+				 <th>DNI</th>
+				 <th>DOMICILIO</th>
+				 <th>CIUDAD</th>		 
+				 <th>EMAIL</th>
+				 <th>TELEFONO</th>
+				 <th>POS IVA</th>
+				 <th>CUIT</th>				 
+				 <th colspan="2">ACCIONES</th>	
 				</tr>
+			</thead>
+			<c:forEach var="cli" items="${listaCli}">
+				<tbody>
+					<tr class="cuerpo">
+						<td><c:out value="${cli.id_cliente}"/></td>							
+						<td><c:out value="${cli.nombre}"/></td>
+						<td><c:out value="${cli.apellido}"/></td>					
+						<td><c:out value="${cli.fecha_nacimiento}"/></td>
+						<td><c:out value="${cli.dni}"/></td>
+						<td><c:out value="${cli.domicilio}"/></td>
+						<td><c:out value="${cli.ciudad.nombre_ciudad}"/></td>
+						<td><c:out value="${cli.email}"/></td>
+						<td><c:out value="${cli.telefono}"/></td>
+						<td><c:out value="${cli.posIva.nombre_posiva}"/></td>
+						<td><c:out value="${cli.cuit}"/></td>
+						<td><a href="adminCliente?action=showedit&id=<c:out value="${cli.id_cliente}" />" class="btn btn-warning btn-sm">Editar</a></td>
+						<td><a href="adminCliente?action=eliminar&id=<c:out value="${cli.id_cliente}"/>" class="btn btn-danger btn-sm">Eliminar</a> </td>				
+					</tr>
+				</tbody>
 			</c:forEach>
 		</table>
 	</div>

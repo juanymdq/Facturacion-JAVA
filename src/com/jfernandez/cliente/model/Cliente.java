@@ -19,7 +19,12 @@ public class Cliente {
 	private Ciudad ciudad;
 	private String cuit;
 	
-	//--------CONSTRUCTOR---------------------------------------------------------------------
+	//--------CONSTRUCTORES---------------------------------------------------------------------
+	public Cliente(int id_cliente) {
+		this.id_cliente = id_cliente;
+	}
+	
+	
 	public Cliente(int id_cliente, String nombre, String apellido, Date fecha_nacimiento, String dni, String domicilio,
 			String email, String telefono, PosIva posIva, Ciudad ciudad, String cuit) {		
 		this.id_cliente = id_cliente;
