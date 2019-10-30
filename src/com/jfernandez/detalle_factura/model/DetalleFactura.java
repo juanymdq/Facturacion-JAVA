@@ -6,19 +6,17 @@ public class DetalleFactura {
 
 	private int id_detalle;
 	private int cantidad;
-	private Articulo articulo;
-	private double importe;
+	private Articulo articulo;	
 	
 	public DetalleFactura(int id_detalle) {
 		this.id_detalle = id_detalle;
 	}
 	
-	public DetalleFactura(int id_detalle, int cantidad, Articulo articulo, double importe) {
+	public DetalleFactura(int id_detalle, int cantidad, Articulo articulo) {
 		super();
 		this.id_detalle = id_detalle;
 		this.cantidad = cantidad;
-		this.articulo = articulo;
-		this.importe = importe;
+		this.articulo = articulo;	
 	}
 	
 	public int getId_detalle() {
@@ -38,13 +36,7 @@ public class DetalleFactura {
 	}
 	public void setArticulo(Articulo articulo) {
 		this.articulo = articulo;
-	}
-	public double getImporte() {
-		return importe;
-	}
-	public void setImporte(double importe) {
-		this.importe = importe;
-	}
+	}	
 	
 	
 }

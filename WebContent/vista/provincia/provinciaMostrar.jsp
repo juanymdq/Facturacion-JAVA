@@ -8,37 +8,65 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
-.container{
-	font-size:18px;
-	width:700px;
-}
+.container{	
 
+	font-size:12px;
+	width:100%;
+	margin:10px 0 0 10px;
+}
+.form-principal{
+
+	align:center;
+	width:700px;
+	margin:10px 0 0 300px;
+}
+.table{
+	align:center;
+}
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+ background-color: #FDDF96;
+}
+.table-striped>tbody>tr:nth-child(even)>td, 
+.table-striped>tbody>tr:nth-child(even)>th {
+ background-color: #FDDF96;
+}
+.table-striped>thead>tr>th {
+   background-color: #E7AC1F;
+}
 </style>
+
 <title>Administrar Provincias</title>
 </head>
 <body>
 	<center><h1>Lista  Provincias</h1></center>
 	<center><a href="adminProvincia?action=mostrar" >Actualizar</a></center>
 	<div class="container">
-		<center><p style="color:red">${mensaje}<p></center>
-		<a href="adminProvincia?action=nuevo" class="btn btn-success btn-lg">Nuevo Registro</a>
-		<br>
-		<center><a href="adminProvincia?action=index">Ir al menú</a></center>
-		<table class="table table-sm">
-			<tr>
-			 <td> ID</td>
-			 <td> NOMBRE</td>		 
-			 <td colspan="2">ACCIONES</td>			
-			</tr>
-			<c:forEach var="provincia" items="${lista}">
-				<tr>
-					<td><c:out value="${provincia.id_provincia}"/></td>			
-					<td><c:out value="${provincia.nombre_provincia}"/></td>				
-					<td><a href="adminProvincia?action=showedit&id=<c:out value="${provincia.id_provincia}"/>" class="btn btn-warning btn-sm">Editar</a></td>
-					<td><a href="adminProvincia?action=eliminar&id=<c:out value="${provincia.id_provincia}"/>" class="btn btn-danger btn-sm">Eliminar</a> </td>				
-				</tr>
-			</c:forEach>
-		</table>
+		<div class="form-principal">
+			<center><p style="color:red">${mensaje}<p></center>
+			<a href="adminProvincia?action=nuevo" class="btn btn-success btn-lg">Nuevo Registro</a>
+			<br>
+			<center><a href="adminProvincia?action=index">Ir al menú</a></center>
+			<table class="table table-striped">
+				<thead>		
+					<tr>
+					 <th> ID</th>
+					 <th> NOMBRE</th>		 
+					 <th colspan="2">ACCIONES</th>			
+					</tr>
+				</thead>
+				<c:forEach var="provincia" items="${lista}">
+					<tbody>
+						<tr>
+							<td><c:out value="${provincia.id_provincia}"/></td>			
+							<td><c:out value="${provincia.nombre_provincia}"/></td>				
+							<td><a href="adminProvincia?action=showedit&id=<c:out value="${provincia.id_provincia}"/>" class="btn btn-warning btn-sm">Editar</a></td>
+							<td><a href="adminProvincia?action=eliminar&id=<c:out value="${provincia.id_provincia}"/>" class="btn btn-danger btn-sm">Eliminar</a> </td>				
+						</tr>
+					</tbody>
+				</c:forEach>
+			</table>
+		</div>
 	</div>
 </body>
 </html>

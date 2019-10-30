@@ -16,6 +16,10 @@ public class Articulo {
 	private int cantidad;
 	
 	//--------CONSTRUCTORES---------------------------------------------------------------------------------
+	public Articulo(int id_articulo) {
+		this.id_articulo=id_articulo;
+	}
+	
 	public Articulo(int id_articulo, String nombre, double precio) {
 		this.id_articulo=id_articulo;
 		this.nombre_articulo=nombre;

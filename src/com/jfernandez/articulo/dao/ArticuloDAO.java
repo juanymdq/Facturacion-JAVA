@@ -113,7 +113,7 @@ public class ArticuloDAO {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		
 		statement.setInt(1, art.getId_articulo());
-		statement.setObject(2, art.getcat().getId_categoria());
+		statement.setInt(2, art.getcat().getId_categoria());
 		statement.setString(3, art.getNombre_articulo());		
 		//----conversion de fecha--------------------------------------------------------------------
 		java.util.Date utilDate =art.getFecha_alta();		
