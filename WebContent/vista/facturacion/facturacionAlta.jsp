@@ -19,7 +19,10 @@
 	font-size:12px;
 }
 #tabla-articulos{
+	font-size:10px;
 	width:700px
+	 border-collapse: separate;
+  border-spacing:  2px;
 }
 </style>
 <script>
@@ -35,10 +38,66 @@ window.onload = function(){
 	  document.getElementById('fechaActual').value=ano+"-"+mes+"-"+dia;
 }
 
-$('#tabla-articulos').on('click', '.clickable-row', function(event) {
-	  $(this).addClass('active').siblings().removeClass('active');
-});
+$(document).ready(function() {
+	$("input").click(function() {
+	  var $input = $( this );
+	  alert($input.attr( "id" ));
+	})
 	
+})
+//Devuelve el id del articulo al seleccionar del form modal emergente
+//Se agrega al detalle el articulo seleccionado
+$(document).ready(function() {
+		$("a.l1s").click(function(){
+		//Obtiene id articulo seleccionado	
+		idart = $(this).parents("tr").find("td").eq(0).html();		
+		//trae la cantidad de articulos
+		var cont = document.getElementById('selectArt').length; 		
+        //inicia el contador
+        var i=0;
+        //itera por el select buscando el articulo seleccionado
+        var Encontro = false;
+        while(i<=cont && !Encontro){
+        	tempId = document.getElementById('selectArt').options[i].value;        	
+            datosArt = document.getElementById('selectArt').options[i].text;            
+            if(idart==tempId){
+                //alert('encontro');
+                Encontro=true;
+            }
+            i++;
+         }
+         if(Encontro){        	 
+        	temp = datosArt.split("-");
+        	//en vartd pongo el id del articulo seleccionado
+        	var vartd = "td-text" + temp[0];
+        	//en var fila creo un fila nueva con los datos del articulo
+        	var fila="<td id='"+vartd+"'></td><td>"+temp[1]+"</td><td>"+temp[2]+"</td><td>-</td>";  	 
+	        //creo un elemento TR
+       	    var btn = document.createElement("TR");
+	        //le inserto la info a al elemento
+       	   	btn.innerHTML=fila;
+	        //inserto en el body del detalle la info creada
+       	    document.getElementById("body-detalle").appendChild(btn);
+       	    //creo un elemento text
+	       	var input = document.createElement("input");
+       	    //le agrego propiedades
+	 		input.type = "text";
+	 		input.id = "textCant"+temp[0];
+	 		//input.value = "textCant"+temp[0];
+	 		input.style = "width:40px"
+	 		input.maxlength = "4"
+	 		input.onclick = "alert('entra')"
+	 		
+			var parent = document.getElementById(vartd);
+			//inserto el elemento text al td con id "td-text" mas el id de articulo
+			parent.appendChild(input);
+       		
+         } 
+		
+	});
+});
+
+
 $(document).ready(function(){	
 	$( "#cliente" ).change(function() {				 
          //OBTENGO EL NOMBRE DE LA CIUDAD SELECCIONADA
@@ -64,6 +123,7 @@ $(document).ready(function(){
 		  
 	});
 	
+
 	
 });
 </script>
@@ -72,14 +132,14 @@ $(document).ready(function(){
 <body>
 	<div class="container">
 		<div class="form-principal">
-			<center><h1>Registrar Factura</h1></center>	
+			<center><h3>Registrar Factura</h3></center>	
 			<hr>
 			<center><a href="adminFactura?action=mostrar">Volver</a></center>
 			<form action="adminFactura?action=register" method="post">
 				<div class="form-row">				
 					<div class="form-group col-md-2" style="width:40px;">
 						<label>Id Factura</label>
-						<input class="form-control" name ="id_factura" for="exampleFormControlInput1" type="text" placeholder="Ingrese id">  
+						<input id="id" class="form-control" name ="id_factura" for="exampleFormControlInput1" type="text" placeholder="Ingrese id">  
 			  		</div>		
 					<div class="form-group col-md-1" style="width:20px;">
 						<label>Tipo</label>
@@ -114,88 +174,90 @@ $(document).ready(function(){
 				  			<option value="${pos.id_posiva}">${pos.nombre_posiva}</option>
 				  		</c:forEach>				  			  	
 					  </select>			  
+					</div>	
+						<!-- SELECT DE ARTICULOS OCULTO -->
+			       <div class="form-group col-md-1" style="width:20px;">
+					  <select id="selectArt" name="articulo" class="form-control" style="width:20px; ">		<!-- visibility:hidden  -->	  
+				  	  	<c:forEach var="art" items="${listaArt}">				  	  	
+				  			<option value="${art.id_articulo}">${art.id_articulo}-${art.nombre_articulo}-${art.precio}</option>
+				  		</c:forEach>				  			  	
+					  </select>			  
 					</div>					
 				</div> <!-- form-row -->
 			  	
 			  	<div class="form-row">
 			  	
-			  	<table class="table table-striped">
-				<thead>		
-					<tr>
-					 <th>CANT.</th>
-					 <th>DETALLE</th>		 
-					 <th>P. UNIT</th>
-					 <th>IMPORTE</th>
-					 <th colspan="2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Sel. Articulo</button></th>			
-					</tr>
-				</thead>
-				<c:forEach var="provincia" items="${lista}">
-					<tbody>
-						<tr>
-							<td><c:out value="${provincia.id_provincia}"/></td>			
-							<td><c:out value="${provincia.nombre_provincia}"/></td>				
-							<td><a href="adminProvincia?action=showedit&id=<c:out value="${provincia.id_provincia}"/>" class="btn btn-warning btn-sm">Editar</a></td>
-							<td><a href="adminProvincia?action=eliminar&id=<c:out value="${provincia.id_provincia}"/>" class="btn btn-danger btn-sm">Eliminar</a> </td>				
-						</tr>
-					</tbody>
-				</c:forEach>
-			</table>
-			  	
-			<!-- ****************************** Modal ******************************************* -->
-				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-				  <div class="modal-dialog" role="document">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				      	<h4 class="modal-title" id="myModalLabel">SELECCIONAR ARTICULO</h4>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>				        
-				      </div>				       
-				      <div class="modal-body">
-				      	 
-				      	 <table id="tabla-articulos" class="table table-responsive">
-							<thead>
-								<tr >
-								 <th>ID</th>
-								 <th>NOMBRE</th>
-								 <th>CATEGORIA</th>
-								 <th>FECHA ALTA</th>
-								 <th>PRECIO</th>
-								 <th>CANTIDAD</th>								 
-								</tr>
-							</thead>
-							<c:forEach var="art" items="${listaArt}">
-								<tbody>
+				  	<table class="table table-striped">
+						<thead>		
+							<tr>
+							 <th>CANT.</th>							 
+							 <th>DETALLE</th>		 
+							 <th>P. UNIT</th>
+							 <th>IMPORTE</th>
+							 <th colspan="2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Sel. Articulo</button></th>			
+							</tr>
+						</thead>						
+						<tbody id="body-detalle"></tbody>						
+					</table>
+				  	
+				<!-- ****************************** Modal ******************************************* -->
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					      	<h4 class="modal-title" id="myModalLabel">SELECCIONAR ARTICULO</h4>
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>				        
+					      </div>				      				       
+					      <div class="modal-body">				      	 
+					      	 <table id="tabla-articulos" class="table table-responsive">
+								<thead>
 									<tr class="clickable-row">
-										<td><c:out value="${art.id_articulo}"/></td>							
-										<td><c:out value="${art.nombre_articulo}"/></td>
-										<td><c:out value="${art.cat.getNombre_categoria()}"/></td>					
-										<td><c:out value="${art.fecha_alta}"/></td>
-										<td><c:out value="${art.precio}"/></td>
-										<td><c:out value="${art.cantidad}"/></td>														
+									 <th>ID</th>
+									 <th>NOMBRE</th>
+									 <th>CATEGORIA</th>									 
+									 <th>PRECIO</th>
+									 <th>CANTIDAD</th>
+									 <th >Seleccionar</th>								 
 									</tr>
-								</tbody>
-							</c:forEach>
-						</table>				      	 
-				      	 		        
-				      </div>					     
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				        <button type="button" id="btn_guardar" class="btn btn-primary">Guardar</button>					        
-				      </div><!-- modal-footer -->				      
-				    </div><!-- modal-content -->
-				  </div><!-- modal-dialog -->
-				</div><!-- modal fade -->
-			</div><!-- form-group col-md-2  -->
+								</thead>
+								<c:forEach var="art" items="${listaArt}">
+									<tbody>
+										<tr class="clickable-row">
+											<td><c:out value="${art.id_articulo}"/></td>							
+											<td><c:out value="${art.nombre_articulo}"/></td>
+											<td><c:out value="${art.cat.getNombre_categoria()}"/></td>											
+											<td><c:out value="${art.precio}"/></td>
+											<td><c:out value="${art.cantidad}"/></td>	
+											<td ><a class='l1s' title='seleccionar'><img src="recursos/imagenes/accept.png"></a></td>																
+										</tr>
+									</tbody>
+								</c:forEach>
+							</table>				      	 
+					      	 		        
+					      </div>					     
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>					       				        
+					      </div><!-- modal-footer -->				      
+					    </div><!-- modal-content -->
+					  </div><!-- modal-dialog -->
+					</div><!-- modal fade -->
+				
+			
+				
+				
+				
+				</div><!-- form-row  -->
 		<!-- ****************************** Modal ******************************************* -->
+			 
 			  	
 			  	
 			  	
 			  	
-			  	</div>	
 			  			
-					<button type="submit" name="agregar" class="btn btn-lg btn-primary btn-block btn-signin">Guardar</button>
+				<button type="submit" name="agregar" class="btn btn-lg btn-primary btn-block btn-signin">Guardar</button>
 							
 			</form>
-		</div>
-	</div>
+		</div> <!-- form-principal -->
+	</div> <!-- container -->
 </body>
 </html>
