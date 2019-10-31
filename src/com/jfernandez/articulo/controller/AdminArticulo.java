@@ -44,8 +44,7 @@ public class AdminArticulo extends HttpServlet{
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AdminArticulo() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
  
 	/**
@@ -113,8 +112,7 @@ public class AdminArticulo extends HttpServlet{
 		
 		try {
 			fecha = formatoFecha.parse(request.getParameter("fecha_alta"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (ParseException e) {			
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------
@@ -171,8 +169,7 @@ public class AdminArticulo extends HttpServlet{
 		
 		try {
 			fecha = formatoFecha.parse(request.getParameter("fecha_alta"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (ParseException e) {			
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------

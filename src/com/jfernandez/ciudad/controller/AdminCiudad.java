@@ -46,8 +46,7 @@ public class AdminCiudad extends HttpServlet {
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AdminCiudad() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
  
 	/**

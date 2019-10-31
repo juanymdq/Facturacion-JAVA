@@ -29,8 +29,7 @@ public class AdminCategoria extends HttpServlet{
 		try {
  
 			categoriaDAO = new CategoriaDAO(jdbcURL, jdbcUsername, jdbcPassword);
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception e) {		
 		}
 	}
  

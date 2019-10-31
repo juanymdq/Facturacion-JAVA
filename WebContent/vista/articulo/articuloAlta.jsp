@@ -9,7 +9,19 @@
 <script type="text/javascript" src="recursos/js/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="recursos/js/guardarCategoria.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+<script>
+window.onload = function(){
+	  var fecha = new Date(); //Fecha actual
+	  var mes = fecha.getMonth()+1; //obteniendo mes
+	  var dia = fecha.getDate(); //obteniendo dia
+	  var ano = fecha.getFullYear(); //obteniendo año
+	  if(dia<10)
+	    dia='0'+dia; //agrega cero si el menor de 10
+	  if(mes<10)
+	    mes='0'+mes //agrega cero si el menor de 10
+	  document.getElementById('fechaActual').value=ano+"-"+mes+"-"+dia;
+	}
+</script>
 <title>Registrar Articulo</title>
 </head>
 <body>
@@ -71,13 +83,12 @@
 				</div><!-- modal fade -->
 			</div><!-- form-group col-md-2  -->
 		<!-- ****************************** Modal ******************************************* -->
-		</div>
+		</div> <!-- form-row  -->
+		
 		<div class="form-row">				
 			<div class="form-group col-md-2" style="width:200px;">
 				<label for="formGroupExampleInput2">Fecha de alta</label>
-				<input type="date" name="fecha_alta">
-				<fmt:parseDate pattern="yyyy-MM-dd HH:mm:ss" var="myDate"/>
-				<fmt:formatDate var="startFormat" pattern="yyyy-MM-dd"/>
+				<input type="date" id="fechaActual" name="fecha_alta" value=""  class="form-control">			
 			</div>
 		</div>
 		<div class="form-row">	

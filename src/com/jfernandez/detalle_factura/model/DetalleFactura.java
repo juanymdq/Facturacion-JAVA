@@ -8,6 +8,8 @@ public class DetalleFactura {
 	private int cantidad;
 	private Articulo articulo;	
 	
+	//---------CONTRUCTORES-------------------------------------------------------
+	
 	public DetalleFactura(int id_detalle) {
 		this.id_detalle = id_detalle;
 	}
@@ -18,6 +20,8 @@ public class DetalleFactura {
 		this.cantidad = cantidad;
 		this.articulo = articulo;	
 	}
+	
+	//----GETTERS AND SETTERS---------------------------------------------------------
 	
 	public int getId_detalle() {
 		return id_detalle;

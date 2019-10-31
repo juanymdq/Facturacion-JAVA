@@ -45,19 +45,17 @@ padding-left: 40px;
 				</div>
 				<br>
 				<div class="form-row">
-					 <div class="form-group col-md-4">	 
-						    <label for="exampleFormControlInput1">Fecha Nacimiento</label>
-							<input for="exampleFormControlInput1" type="date" name="fecha_nacimiento" class form-control>
-							<fmt:parseDate pattern="yyyy-MM-dd HH:mm:ss" var="myDate"/>
-							<fmt:formatDate var="startFormat" pattern="yyyy-MM-dd"/>
+					 <div class="form-group col-md-3" style="width:100px;">	 
+					    <label>Fecha Nacimiento</label>
+						<input type="date" name="fecha_nacimiento" class="form-control">
+						<fmt:parseDate pattern="yyyy-MM-dd HH:mm:ss" var="myDate"/>
+						<fmt:formatDate var="startFormat" pattern="yyyy-MM-dd"/>
 					</div>
-				</div>
-				<div class="form-row">
 					<div class="form-group col-md-3">
 						 <label for="exampleFormControlInput1">DNI</label>
 						 <input type="text" name="dni" class="form-control" placeholder="Ingrese DNI">
 					</div>
-				</div>
+				</div>				
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						  <label for="exampleFormControlInput1">Domicilio</label>

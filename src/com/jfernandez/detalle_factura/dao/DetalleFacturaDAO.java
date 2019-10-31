@@ -97,7 +97,8 @@ public class DetalleFacturaDAO {
 		
 		statement.setInt(1, det.getId_detalle());
 		statement.setInt(2, det.getCantidad());
-		statement.setInt(3, det.getArticulo().getId_articulo());		
+		statement.setInt(3, det.getArticulo().getId_articulo());
+		statement.setInt(4, det.getId_detalle());
 			
 		boolean rowActualizar = statement.executeUpdate() > 0;
 		
@@ -105,6 +106,22 @@ public class DetalleFacturaDAO {
 		con.desconectar();
 						
 		return rowActualizar;
+	}
+	
+	//eliminar
+	public boolean eliminar(DetalleFactura det) throws SQLException {
+		boolean rowEliminar = false;		
+		String sql = "DELETE FROM detalle_factura WHERE id_detalle=?";
+		con.conectar();
+		connection = con.getJdbcConnection();
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setInt(1, det.getId_detalle());
+ 
+		rowEliminar = statement.executeUpdate() > 0;
+		statement.close();
+		con.desconectar();
+ 
+		return rowEliminar;
 	}
 	
 }

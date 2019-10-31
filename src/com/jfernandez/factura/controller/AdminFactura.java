@@ -12,19 +12,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jfernandez.ciudad.model.Ciudad;
+import com.jfernandez.articulo.dao.ArticuloDAO;
+import com.jfernandez.articulo.model.Articulo;
 import com.jfernandez.cliente.dao.ClienteDAO;
 import com.jfernandez.cliente.model.Cliente;
+import com.jfernandez.detalle_factura.dao.DetalleFacturaDAO;
 import com.jfernandez.detalle_factura.model.DetalleFactura;
+import com.jfernandez.factura.dao.FacturaDAO;
 import com.jfernandez.factura.model.Factura;
 import com.jfernandez.posiva.dao.PosIvaDAO;
 import com.jfernandez.posiva.model.PosIva;
 
+@WebServlet("/adminFactura")
 public class AdminFactura extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	FacturaDAO facturaDAO;
 	ClienteDAO clienteDAO;
 	PosIvaDAO posivaDAO;
+	ArticuloDAO articuloDAO;
+	DetalleFacturaDAO detalleDAO;
+	
 	private PosIva posiva = null;
 	private Cliente cliente = null;
 	private DetalleFactura detalle = null;
@@ -38,24 +46,20 @@ public class AdminFactura extends HttpServlet {
 			clienteDAO = new ClienteDAO(jdbcURL, jdbcUsername, jdbcPassword);
 			posivaDAO = new PosIvaDAO(jdbcURL, jdbcUsername, jdbcPassword);
 			detalleDAO = new DetalleFacturaDAO(jdbcURL, jdbcUsername, jdbcPassword);
-			//ciudadDAO = new CiudadDAO(jdbcURL, jdbcUsername, jdbcPassword);
+			facturaDAO = new FacturaDAO(jdbcURL, jdbcUsername, jdbcPassword);
+			articuloDAO= new ArticuloDAO(jdbcURL, jdbcUsername, jdbcPassword);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
+
 	public AdminFactura() {
 		super();
 	}
  
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {	
 		System.out.println("Servlet Factura doGet");
@@ -76,13 +80,13 @@ public class AdminFactura extends HttpServlet {
 				mostrar(request, response);
 				break;
 			case "showedit":
-				showEditar(request, response);
+	//			showEditar(request, response);
 				break;	
 			case "editar":
-				editar(request, response);
+	//			editar(request, response);
 				break;
 			case "eliminar":
-				eliminar(request, response);
+				//eliminar(request, response);
 				break;
 			default:
 				break;
@@ -93,13 +97,10 @@ public class AdminFactura extends HttpServlet {
 		
 	}
 	
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("Servlet Cliente doPost");
+		System.out.println("Servlet Factura doPost");
 		doGet(request, response);
 	}
 	
@@ -124,8 +125,7 @@ public class AdminFactura extends HttpServlet {
 		//--------------------------------------------------------------------
 		posiva = new PosIva(Integer.parseInt(request.getParameter("id_posiva")));
 		cliente = new Cliente(Integer.parseInt(request.getParameter("id_cliente")));
-		detalle = new DetalleFactura(Integer.parseInt(request.getParameter("id_detalle")));
-		//ciudad = new Ciudad(Integer.parseInt(request.getParameter("id_ciudad")));
+		detalle = new DetalleFactura(Integer.parseInt(request.getParameter("id_detalle")));		
 		Factura factura = new Factura(
 				Integer.parseInt(request.getParameter("id_factura")),
 				request.getParameter("tipo_factura"),
@@ -137,35 +137,39 @@ public class AdminFactura extends HttpServlet {
 				Double.parseDouble(request.getParameter("total"))				
 		);		
 				
-		clienteDAO.insertar(cliente);
+		facturaDAO.insertar(factura);
 		mostrar(request, response);
 	}
 	
 	//Deriva al formulario de altas
-	private void nuevo(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException, SQLException {
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/factura/facturaAlta.jsp");
-		//Paso todas las posiciones IVA
-		List<PosIva>liva = posivaDAO.listarPosiva();		
-		request.setAttribute("listaIva", liva);
-		//Paso todas las ciudades
-					
-		dispatcher.forward(request, response);
-	}
-	
-	//muestra todos los clientes
-	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/factura/facturaMostrar.jsp");		
-		List<Cliente> listaClientes= clienteDAO.listarCliente();
-		for (Cliente cliente : listaClientes) {
-			System.out.println(cliente);
+	private void nuevo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/facturacion/facturacionAlta.jsp");
+		//trae todos los clientes		
+		List<Cliente>lClientes= clienteDAO.listarCliente();		
+		request.setAttribute("listaCli", lClientes);
+		for (Cliente cliente : lClientes) {
+			System.out.println(cliente.getCiudad().getNombre_ciudad());
 		}
-		request.setAttribute("listaCli", listaClientes);
+		
+		//trae todos los Posiva
+		List<PosIva>lPosiva=posivaDAO.listarPosiva();
+		request.setAttribute("listaPosiva", lPosiva);
+		//trae todos los articulos para seleccionar en el detalle factura
+		List<Articulo>lArticulos=articuloDAO.listarArticulo();
+		request.setAttribute("listaArt", lArticulos);
 		dispatcher.forward(request, response);
 	}
 	
-	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	//muestra todas las facturas
+	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/facturacion/facturacionMostrar.jsp");
+		//Trae todas las facturas
+		List<Factura> listaFactura = facturaDAO.listarFactura();
+		request.setAttribute("listaF", listaFactura);			
+		dispatcher.forward(request, response);
+	}
+	
+/*	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		
 		Factura factura = facturaDAO(Integer.parseInt(request.getParameter("id")));
 		
@@ -197,8 +201,7 @@ public class AdminFactura extends HttpServlet {
 		
 		try {
 			fecha = formatoFecha.parse(request.getParameter("fecha"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (ParseException e) {			
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------
@@ -224,6 +227,6 @@ public class AdminFactura extends HttpServlet {
 			mostrar(request, response);
 		}
 	}
-	
+	*/
 	
 }

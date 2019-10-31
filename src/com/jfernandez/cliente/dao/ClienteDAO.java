@@ -95,14 +95,9 @@ public class ClienteDAO {
 			String domicilio = rs.getString("domicilio");
 			String email  = rs.getString("email");
 			String telefono = rs.getString("telefono");			
-			objIva = new PosIva(rs.getInt("id_posiva"), rs.getString("nombre_posiva"),rs.getDouble("porcentaje"));			
+			objIva = new PosIva(rs.getInt("id_posiva"));			
 			objProv = new Provincia(rs.getInt("id_provincia"));			
-			objCiudad = new Ciudad(
-					rs.getInt("id_ciudad"),
-					rs.getString("nombre_ciudad"),
-					rs.getString("cod_postal"),
-					objProv
-			);						
+			objCiudad = new Ciudad(rs.getInt("id_ciudad"), rs.getString("nombre_ciudad"));						
 			String cuit = rs.getString("cuit");
 			
 			Cliente cliente = new Cliente(
@@ -154,14 +149,9 @@ public class ClienteDAO {
 			String email  = rs.getString("email");
 			String telefono = rs.getString("telefono");	
 			
-			objIva = new PosIva(rs.getInt("id_posiva"), rs.getString("nombre_posiva"),rs.getDouble("porcentaje"));			
+			objIva = new PosIva(rs.getInt("id_posiva"));			
 			objProv = new Provincia(rs.getInt("id_provincia"));			
-			objCiudad = new Ciudad(
-					rs.getInt("id_ciudad"),
-					rs.getString("nombre_ciudad"),
-					rs.getString("cod_postal"),
-					objProv
-			);						
+			objCiudad = new Ciudad(rs.getInt("id_ciudad"));						
 			String cuit = rs.getString("cuit");
 			
 			cliente = new Cliente(

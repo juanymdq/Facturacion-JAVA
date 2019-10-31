@@ -31,7 +31,7 @@ public class AdminPosiva extends HttpServlet{
  
 			posivaDAO = new PosIvaDAO(jdbcURL, jdbcUsername, jdbcPassword);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
  
@@ -39,8 +39,7 @@ public class AdminPosiva extends HttpServlet{
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AdminPosiva() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
  
 	/**

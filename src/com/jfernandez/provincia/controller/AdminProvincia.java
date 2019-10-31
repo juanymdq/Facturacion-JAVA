@@ -32,7 +32,7 @@ public class AdminProvincia extends HttpServlet {
  
 			provinciaDAO = new ProvinciaDAO(jdbcURL, jdbcUsername, jdbcPassword);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
  

@@ -21,13 +21,16 @@
 				<td align="center"><a href="adminCiudad?action=mostrar">Ciudades</a></td>
 			</tr>
 			<tr>
-				<td align="center"><a href="adminArticulo?action=mostrar">Articulos</a></td>
+				<td align="center"><a href="adminArticulo?action=mostrar">Art&iacute;culos</a></td>
 			</tr>
 			<tr>
-				<td align="center"><a href="adminPosiva?action=mostrar">Posicion IVA</a></td>
+				<td align="center"><a href="adminPosiva?action=mostrar">Posici&oacute;n IVA</a></td>
 			</tr>
 			<tr>
 				<td align="center"><a href="adminCliente?action=mostrar">Clientes</a></td>
+			</tr>
+			<tr>
+				<td align="center"><a href="adminFactura?action=mostrar">Facturaci&oacute;n</a></td>
 			</tr>
 		</table>
 	</div>	

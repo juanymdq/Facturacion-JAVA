@@ -159,10 +159,7 @@ public class AdminCliente extends HttpServlet{
 	//muestra todos los clientes
 	private void mostrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException , ServletException{
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/cliente/clienteMostrar.jsp");		
-		List<Cliente> listaClientes= clienteDAO.listarCliente();
-		for (Cliente cliente : listaClientes) {
-			System.out.println(cliente);
-		}
+		List<Cliente> listaClientes= clienteDAO.listarCliente();	
 		request.setAttribute("listaCli", listaClientes);
 		dispatcher.forward(request, response);
 	}	
@@ -196,8 +193,7 @@ public class AdminCliente extends HttpServlet{
 		
 		try {
 			fecha = formatoFecha.parse(request.getParameter("fecha_nacimiento"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (ParseException e) {			
 			e.printStackTrace();
 		}
 		//--------------------------------------------------------------------

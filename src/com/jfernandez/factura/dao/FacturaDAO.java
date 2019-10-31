@@ -63,15 +63,19 @@ public class FacturaDAO {
 		public List<Factura> listarFactura() throws SQLException { 
 			List<Factura> listaFacturas = new ArrayList<Factura>();
 			
-			String sql = "SELECT * "
+			String sql = "SELECT * FROM factura as f "
+					+ "INNER JOIN cliente as c "
+					+ "ON f.id_cliente=c.id_cliente";
+			
+	/*		String sql = "SELECT * "
 					+ "FROM factura as f " 
 					+ "INNER JOIN detalle_factura as df"
 					+ "INNER JOIN cliente as c "
 					+ "INNER JOIN posiva as p "
 					+ "INNER JOIN ciudad as ci "
 					+ "ON f.id_detalle = df.id_detalle and f.id_cliente=c.id_cliente and "
-					+ "f.id_posiva=p.posiva and c.id_ciudad=ci.id_ciudad";
-			
+					+ "f.id_posiva=p.id_posiva and c.id_ciudad=ci.id_ciudad";
+		*/	
 			con.conectar();
 			connection = con.getJdbcConnection();
 			Statement statement = connection.createStatement();
@@ -81,35 +85,10 @@ public class FacturaDAO {
 				int id = rs.getInt("id_factura");
 				String tipo = rs.getString("tipo_factura");
 				Date fecha = rs.getDate("fecha");
-				Ciudad objCiudad = new Ciudad(rs.getInt("id_ciudad"), rs.getString("nombre_ciudad"));
-				Cliente objClie = new Cliente(
-						rs.getInt("id_cliente"),
-						rs.getString("nombre"),
-						rs.getString("apellido"),
-						rs.getString("domicilio"),
-						objCiudad
-				);
-				PosIva objPosiva = new PosIva(
-						rs.getInt("id_posiva"),
-						rs.getString("nombre_posiva"),
-						rs.getDouble("Porcentaje")
-				);
-				
-				String condicion = rs.getString("cond_venta");
-				
-				Articulo objArt = new Articulo(
-						rs.getInt("id_articulo"),
-						rs.getString("nombre_articulo"),
-						rs.getDouble("precio")
-				);
-				
-				DetalleFactura objDetalle = new DetalleFactura(
-						rs.getInt("id_detalle"),
-						rs.getInt("cantidad"),
-						objArt,
-						rs.getDouble("importe")
-				);
-				
+				Cliente objClie = new Cliente(rs.getInt("id_cliente"));
+				PosIva objPosiva = new PosIva(rs.getInt("id_posiva"));				
+				String condicion = rs.getString("cond_venta");				
+				DetalleFactura objDetalle = new DetalleFactura(rs.getInt("id_detalle"));				
 				Double total = rs.getDouble("total");
 											
 				Factura factura= new Factura(id, tipo, fecha, objClie, objPosiva, condicion, objDetalle, total);

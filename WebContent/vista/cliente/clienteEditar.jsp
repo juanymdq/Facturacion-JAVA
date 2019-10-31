@@ -44,19 +44,17 @@ padding-left: 40px;
 					</div>
 				</div>
 				<div class="form-row">
-					<div class="form-group col-md-4">
-						<label for="exampleFormControlInput1">Fecha de Nacimiento</label>
-						<input for="exampleFormControlInput1" type="date" name="fecha_nacimiento" value='<c:out value="${cliente.fecha_nacimiento}"></c:out>' >
+					 <div class="form-group col-md-3" style="width:100px;">	
+						<label>Fecha de Nacimiento</label>
+						<input class="form-control" type="date" name="fecha_nacimiento" value='<c:out value="${cliente.fecha_nacimiento}"></c:out>' >
 						<fmt:parseDate pattern="yyyy-MM-dd HH:mm:ss" var="myDate"/>
 						<fmt:formatDate var="startFormat" pattern="yyyy-MM-dd"/>
-					</div>	
-				</div>
-				<div class="form-row">		
+					</div>
 					<div class="form-group col-md-3">
 					  <label for="exampleFormControlInput1">DNI</label>
 					  <input for="exampleFormControlInput1" type="text" name="dni" class="form-control" value='<c:out value="${cliente.dni}"></c:out>' >
-					</div>
-				</div>
+					</div>	
+				</div>			
 				<div class="form-row">
 					<div class="form-group col-md-6">
 					  <label for="exampleFormControlInput1">Domicilio</label>
