@@ -7,6 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="recursos/js/jquery-3.4.1.js"></script>
+<script src="recursos/js/insertarArticulo.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <style type="text/css">
 .container{
@@ -40,148 +41,11 @@ window.onload = function(){
 	  if(mes<10)
 	    mes='0'+mes //agrega cero si el menor de 10
 	  document.getElementById('fechaActual').value=ano+"-"+mes+"-"+dia;	 
-	  contfila = 0;
+	 // contfila = 0;
 	 
 }
 
 
-//Devuelve el id del articulo al seleccionar del form modal emergente
-//Se agrega al detalle el articulo seleccionado
-$(document).ready(function() {
-		$("a.l1s").click(function(){
-			
-		//Obtiene id articulo seleccionado	
-		idart = $(this).parents("tr").find("td").eq(0).html();		
-		//trae la cantidad de articulos
-		var cont = document.getElementById('selectArt').length; 		
-        //inicia el contador
-        var i=0;
-        //itera por el select buscando el articulo seleccionado
-        var Encontro = false;
-        while(i<=cont && !Encontro){
-        	tempId = document.getElementById('selectArt').options[i].value;        	
-            datosArt = document.getElementById('selectArt').options[i].text;            
-            if(idart==tempId){
-                //alert('encontro');
-                Encontro=true;
-            }
-            i++;
-         }
-         if(Encontro){        	 
-        	temp = datosArt.split("-");
-        	
-        	contfila = contfila + 1;
-        	
-        	//en vartd pongo el id del articulo seleccionado
-        	var fila;
-        	var findFila = false;
-        	var id = temp[0];
-        	var vartd = "td-id" + id;
-        	var varImp = "td-importe" + id;      
-        		
-       		if(contfila==1){
-       		//en var fila creo un fila nueva con los datos del articulo
-       			fila="<td id='idcol'>"+contfila+"</td><td id='td_idart'>"+id+"</td><td id='"+vartd+"'></td><td>"+temp[1]+"</td><td>"+temp[2]+"</td><td id='"+varImp+"'></td>";
-       			var btn = document.createElement("TR");
-    	        //le inserto la info a al elemento
-           	   	btn.innerHTML=fila;
-    	        //inserto en el body del detalle la info creada
-           	    document.getElementById("body-detalle").appendChild(btn);
-           	    //creo un elemento text
-    	       	var input = document.createElement("input");
-           	    //le agrego propiedades
-    	 		input.type = "text";
-    	 		input.id = "textCant"+temp[0];
-    	 		//input.value = "textCant"+temp[0];
-    	 		input.style = "width:40px"
-    	 		input.maxlength = "4"
-    	 		input.onblur = function(){	 
-    	 			//obtengo la cantidad
-    	 			var cant = document.getElementById(input.id).value;
-    	 			//obtengo el id de la columna importe
-    	 			var valor = "td-importe" + id;
-    	 			//calculo el importe total=importe*cantidad
-    	 			var importe = cant * parseInt(temp[2]);
-    	 			//creo un elemento LABEL
-    	 			var node = document.createElement('label');
-    	 			//le asigno el importe formateado
-    	 			var t = document.createTextNode("$"+importe); 
-    	 			//Agrego el nodo al elemento LABEL
-    	 			node.appendChild(t);
-    	 			//Agrego a la tabla los datos
-    	 			if(document.getElementById(valor).innerHTML!=""){    	 				
-    	 				document.getElementById(valor).innerHTML = "";
-    	 			}
-   		 			document.getElementById(valor).appendChild(node);		             
-    	 			};
-    	 		
-    			var parent = document.getElementById(vartd);
-    			//inserto el elemento text al td con id "td-text" mas el id de articulo
-    			parent.appendChild(input);
-       		}else{
-       			//obtiene la tabla
-       			var t_det = document.getElementById("tablaDetalle");
-       			//obtiene todos los TD de la tabla
-       			var eTD=t_det.getElementsByTagName("td");
-       			//inicializo variable para recorrer las filas de la tabla
-				var i=1;				
-				while(i<t_det.rows.length){//recorro por todas las filas
-					//si la celda ID es igual al articulos seleccionado
-					//emitira un mensaje de alerta informando que el articulo ya fue ingresado
-					if(t_det.rows[i].cells[1].innerHTML==idart){
-						findFila=true
-					}					
-					i++;
-				}
-       			if(!findFila){
-       			//en var fila creo un fila nueva con los datos del articulo
-       				fila="<td id='idcol'>"+contfila+"</td><td id='td_idart'>"+id+"</td><td id='"+vartd+"'></td><td>"+temp[1]+"</td><td>"+temp[2]+"</td><td id='"+varImp+"'></td>";
-       				var btn = document.createElement("TR");
-       		        //le inserto la info a al elemento
-       	       	   	btn.innerHTML=fila;
-       		        //inserto en el body del detalle la info creada
-       	       	    document.getElementById("body-detalle").appendChild(btn);
-       	       	    //creo un elemento text
-       		       	var input = document.createElement("input");
-       	       	    //le agrego propiedades
-       		 		input.type = "text";
-       		 		input.id = "textCant"+temp[0];
-       		 		//input.value = "textCant"+temp[0];
-       		 		input.style = "width:40px"
-       		 		input.maxlength = "4"
-       		 		input.onblur = function(){	 
-       		 			//obtengo la cantidad
-       		 			var cant = document.getElementById(input.id).value;
-       		 			//obtengo el id de la columna importe
-       		 			var valor = "td-importe" + id;
-       		 			//calculo el importe total=importe*cantidad
-       		 			var importe = cant * temp[2];
-       		 			//creo un elemento LABEL
-       		 			var node = document.createElement('label');
-       		 			//le asigno el importe formateado
-       		 			var t = document.createTextNode("$"+importe); 
-       		 			//Agrego el nodo al elemento LABEL
-       		 			node.appendChild(t);
-       		 			//Agrego a la tabla los datos
-       		 		
-       		 			//document.getElementById(valor).removeChild(node);
-       		 			
-       		 			document.getElementById(valor).appendChild(node);		             
-       		 			};
-       		 		
-       				var parent = document.getElementById(vartd);
-       				//inserto el elemento text al td con id "td-text" mas el id de articulo
-       				parent.appendChild(input);
-       			}else{
-       				alert("el articulo ya se ha ingresado");
-       			}
-       		}
-        	
-       		
-         } 
-		
-	});
-});
 
 
 $(document).ready(function(){	
@@ -286,7 +150,7 @@ $(document).ready(function(){
 				  	<table id="tablaDetalle" class="table table-striped">
 						<thead>		
 							<tr>
-							 <th>ID COL</th>
+							 <th></th>							
 							 <th>ID ART.</th>
 							 <th>CANT.</th>							 
 							 <th>DETALLE</th>		 
