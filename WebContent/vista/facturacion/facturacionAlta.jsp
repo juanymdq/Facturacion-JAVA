@@ -24,6 +24,9 @@
 	 border-collapse: separate;
   border-spacing:  2px;
 }
+#body-detalle{
+	height:300px
+}
 </style>
 <script>
 var contfila;
@@ -104,9 +107,12 @@ $(document).ready(function() {
     	 			//le asigno el importe formateado
     	 			var t = document.createTextNode("$"+importe); 
     	 			//Agrego el nodo al elemento LABEL
-    	 			node.appendChild(t)
+    	 			node.appendChild(t);
     	 			//Agrego a la tabla los datos
-    	 			document.getElementById(valor).appendChild(node);		             
+    	 			if(document.getElementById(valor).innerHTML!=""){    	 				
+    	 				document.getElementById(valor).innerHTML = "";
+    	 			}
+   		 			document.getElementById(valor).appendChild(node);		             
     	 			};
     	 		
     			var parent = document.getElementById(vartd);
@@ -155,8 +161,11 @@ $(document).ready(function() {
        		 			//le asigno el importe formateado
        		 			var t = document.createTextNode("$"+importe); 
        		 			//Agrego el nodo al elemento LABEL
-       		 			node.appendChild(t)
+       		 			node.appendChild(t);
        		 			//Agrego a la tabla los datos
+       		 		
+       		 			//document.getElementById(valor).removeChild(node);
+       		 			
        		 			document.getElementById(valor).appendChild(node);		             
        		 			};
        		 		
@@ -196,12 +205,22 @@ $(document).ready(function(){
          }
          if(Encontro){                
              document.getElementById('posiva').value = idnom;
-         }         
-		  
-	});
-	
-
-	
+         }		  
+	});	
+});
+//******************************************************************************
+// Write on keyup event of keyword input element
+ $(document).ready(function(){
+	 $("#search").keyup(function(){		
+	 _this = this;
+	 // Show only matching TR, hide rest of them
+		 $.each($("#tabla-articulos tbody tr"), function() {			 
+			 if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
+			 	$(this).hide();
+			 else
+			 	$(this).show();
+		 });
+ 	});
 });
 </script>
 <title>Registrar Factura</title>
@@ -263,7 +282,7 @@ $(document).ready(function(){
 				</div> <!-- form-row -->
 			  	
 			  	<div class="form-row">
-			  	
+			  		
 				  	<table id="tablaDetalle" class="table table-striped">
 						<thead>		
 							<tr>
@@ -287,10 +306,14 @@ $(document).ready(function(){
 					      	<h4 class="modal-title" id="myModalLabel">SELECCIONAR ARTICULO</h4>
 					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>				        
 					      </div>				      				       
-					      <div class="modal-body">				      	 
-					      	 <table id="tabla-articulos" class="table table-responsive">
+					      <div class="modal-body">		
+					      	<div class="form-group">
+  								Buscar: <input type="text" class="form-control pull-right" style="width:30%" id="search" placeholder="Type to search table...">
+							</div>		      	 
+							
+					      	 <table id="tabla-articulos" class="table-bordered table pull-right" cellspacing="0" style="width: 100%;">
 								<thead>
-									<tr class="clickable-row">
+									<tr role="row" class="clickable-row">
 									 <th>ID</th>
 									 <th>NOMBRE</th>
 									 <th>CATEGORIA</th>									 
@@ -301,7 +324,7 @@ $(document).ready(function(){
 								</thead>
 								<c:forEach var="art" items="${listaArt}">
 									<tbody>
-										<tr class="clickable-row">
+										<tr>
 											<td><c:out value="${art.id_articulo}"/></td>							
 											<td><c:out value="${art.nombre_articulo}"/></td>
 											<td><c:out value="${art.cat.getNombre_categoria()}"/></td>											
