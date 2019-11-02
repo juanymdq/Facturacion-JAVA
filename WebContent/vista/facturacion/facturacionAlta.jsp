@@ -45,9 +45,6 @@ window.onload = function(){
 	 
 }
 
-
-
-
 $(document).ready(function(){	
 	$( "#cliente" ).change(function() {				 
          //OBTENGO EL NOMBRE DE LA CIUDAD SELECCIONADA

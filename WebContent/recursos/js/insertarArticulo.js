@@ -37,7 +37,7 @@ $(document).ready(function() {
 		
 		if(!findFila){			
    		//en var fila creo un fila nueva con los datos del articulo
-   			fila="<td id='"+varBorrar+"'><img src='recursos/imagenes/eliminar.png' width:20px height></td><td id='"+varId+"'>"+idart+"</td><td id='"+varCant+"'></td><td>"+art_nombre+"</td><td id='"+varPrecio+"'>"+art_precio+"</td><td id='"+varImp+"'></td>";
+   			fila="<td id='"+varBorrar+"'><a class='eliminarArt' href='#'><img src='recursos/imagenes/eliminar.png' width:10px height:10px></a></td><td id='"+varId+"'>"+idart+"</td><td id='"+varCant+"'></td><td>"+art_nombre+"</td><td id='"+varPrecio+"'>"+art_precio+"</td><td id='"+varImp+"'></td>";
 
    			var btn = document.createElement("TR");
 	        //le inserto la info a al elemento
@@ -51,6 +51,8 @@ $(document).ready(function() {
 	 		input.id = "textCant"+idart;	 		
 	 		input.style = "width:40px";
 	 		input.maxlength = "4";
+	 		
+	 		
 	 		input.onblur = function(){	 
 	 			//obtengo la cantidad
 	 			var cant = document.getElementById(input.id).value;
@@ -77,7 +79,8 @@ $(document).ready(function() {
 	 				
 	 				document.getElementById(valor).innerHTML = "";
 	 			}
-	 		};    	 	
+	 		};
+	 		input.onkeypress = KeyPressHandler; 
 			var parent = document.getElementById(varCant);
 			//inserto el elemento text al td con id "td-text" mas el id de articulo
 			parent.appendChild(input);
@@ -87,3 +90,14 @@ $(document).ready(function() {
 		
 	});
 });
+function KeyPressHandler(evt)
+{
+   evt = (evt) ? evt : window.event
+   var charCode = (evt.which) ? evt.which : evt.keyCode
+   if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      status = "This field accepts numbers only."
+      return false;
+   }
+   status = ""
+   return true;
+} 
