@@ -29,8 +29,8 @@
 	height:300px
 }
 </style>
-<script>
-var contfila;
+<script type="text/javascript">
+
 window.onload = function(){
 	  var fecha = new Date(); //Fecha actual
 	  var mes = fecha.getMonth()+1; //obteniendo mes
@@ -41,8 +41,6 @@ window.onload = function(){
 	  if(mes<10)
 	    mes='0'+mes //agrega cero si el menor de 10
 	  document.getElementById('fechaActual').value=ano+"-"+mes+"-"+dia;	 
-	 // contfila = 0;
-	 
 }
 
 $(document).ready(function(){	
@@ -58,8 +56,7 @@ $(document).ready(function(){
          while(i<=num_c && !Encontro){
             idp = document.getElementById('selectIva').options[i].value;
             idnom = document.getElementById('selectIva').options[i].text;            
-            if(idp==tempidp){
-                //alert('encontro');
+            if(idp==tempidp){	              
                 Encontro=true;
             }
             i++;
@@ -69,20 +66,7 @@ $(document).ready(function(){
          }		  
 	});	
 });
-//******************************************************************************
-// Write on keyup event of keyword input element
- $(document).ready(function(){
-	 $("#search").keyup(function(){		
-	 _this = this;
-	 // Show only matching TR, hide rest of them
-		 $.each($("#tabla-articulos tbody tr"), function() {			 
-			 if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
-			 	$(this).hide();
-			 else
-			 	$(this).show();
-		 });
- 	});
-});
+
 </script>
 <title>Registrar Factura</title>
 </head>
@@ -174,7 +158,7 @@ $(document).ready(function(){
 							
 					      	 <table id="tabla-articulos" class="table-bordered table pull-right" cellspacing="0" style="width: 100%;">
 								<thead>
-									<tr role="row" class="clickable-row">
+									<tr role="row">
 									 <th>ID</th>
 									 <th>NOMBRE</th>
 									 <th>CATEGORIA</th>									 
