@@ -49,14 +49,15 @@ $(document).ready(function() {
        	    //le agrego propiedades
 	 		input.type = "text";
 	 		input.id = "textCant-"+idart;	 		
-	 		input.style = "width:40px";	 		
+	 		input.style = "width:40px";
+	 		input.maxlength = "4";
 	 		//input.onblur = verificaCantidad(input.id);
 	 		//input.onkeypress = limitarCantidadNumeros;
-	 		input.addEventListener('keydown', limitarCantidadNumeros);	 		
+	 		input.addEventListener('keypress', limitarCantidadNumeros);	 		
 			var parent = document.getElementById(varCant);
 			//inserto el elemento text al td con id "td-text" mas el id de articulo
 			parent.appendChild(input);
-		}else{		
+		}else {		
        		alert("el articulo ya se ha ingresado");
         } 
 	
@@ -111,11 +112,23 @@ $(document).ready(function(){
 	});
 });
 
-
-
-
+function limitarCantidadNumeros(event){
+	
+	 if (event.which < 48 || event.which > 57 || this.value.length === 4) {
+	        return false;
+	      }
+	
+	/*
+	var max_chars = 3;
+	
+	if ($(this).val().length >= max_chars && !isNaN(parseFloat(e.key))) { 
+        $(this).val($(this).val().substr(0, max_chars));
+    }
+	return false
+*/
+}
 //Limitar cantidad de caracteres
-function limitarCantidadNumeros(e){
+function agregaImporte(e){
 	var idfull = $(this).attr('id');	
 	var tmp = idfull.split('-');
 	var idInput = tmp[1];
@@ -142,24 +155,20 @@ function limitarCantidadNumeros(e){
 
 	//Limita a 4 el ingreso de digitos. Verifica que se ingresen solo numeros tmb
 	
-	if(e.key.length === 1){ // Evaluar si es un solo caracter
-	    if(numInput.length <= 4 && !isNaN(parseFloat(e.key))){ 
-	    	var importe = 0;	      
-	        importe = parseInt(numInput) * precio;	        
-			//creo un elemento LABEL
-			var node = document.createElement('label');
-			//le asigno el importe formateado
-			var t = document.createTextNode("$"+importe); 
-			//Agrego el nodo al elemento LABEL
-			node.appendChild(t);			
-			//Agrego a la tabla los datos
-			if(document.getElementById(valor).innerHTML!=""){  				
-				document.getElementById(valor).innerHTML = "";
-			}	        
-			document.getElementById(valor).appendChild(node);
-	    }
-	    return false;
-	}
+	var importe = 0;	      
+    importe = parseInt(numInput) * precio;	        
+	//creo un elemento LABEL
+	var node = document.createElement('label');
+	//le asigno el importe formateado
+	var t = document.createTextNode("$"+importe); 
+	//Agrego el nodo al elemento LABEL
+	node.appendChild(t);			
+	//Agrego a la tabla los datos
+	if(document.getElementById(valor).innerHTML!=""){  				
+		document.getElementById(valor).innerHTML = "";
+	}	        
+	document.getElementById(valor).appendChild(node);
+	  
 	
 }
 
